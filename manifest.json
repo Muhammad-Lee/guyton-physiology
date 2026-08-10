@@ -1,0 +1,64 @@
+{
+  "name": "گایتون ۲۰۱۶ · فیزیولوژی",
+  "short_name": "گایتون ۲۰۱۶",
+  "description": "خلاصه کامل و حرفه‌ای ۱۵ فصل فیزیولوژی گایتون/هال ۲۰۱۶ با قابلیت جستجو، مطالعه آفلاین و نصب به عنوان PWA",
+  "start_url": "/guyton-physiology/?utm_source=homescreen",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f2f7fb",
+  "theme_color": "#1a5e7a",
+  "categories": ["education", "medical", "reference"],
+  "lang": "fa",
+  "dir": "rtl",
+  "id": "/guyton-physiology/",
+  "scope": "/guyton-physiology/",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "shortcuts": [
+    {
+      "name": "فصل ۱ · عمومی و سلول",
+      "url": "/guyton-physiology/?chapter=1",
+      "description": "فیزیولوژی عمومی و سلول"
+    },
+    {
+      "name": "فصل ۳ · قلب",
+      "url": "/guyton-physiology/?chapter=3",
+      "description": "فیزیولوژی قلب و گردش خون"
+    },
+    {
+      "name": "فصل ۵ · کلیه و مایعات",
+      "url": "/guyton-physiology/?chapter=5",
+      "description": "کلیه‌ها و مایعات بدن"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "صفحه اصلی با ۱۵ فصل"
+    },
+    {
+      "src": "screenshot-2.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "مشاهده محتوای کامل هر فصل"
+    }
+  ],
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
