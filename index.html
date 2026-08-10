@@ -1,0 +1,2462 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>گایتون ۲۰۱۶ · ۱۵ فصل</title>
+    
+    <!-- ============================================================
+    PWA Meta Tags (هماهنگ با manifest.json)
+    ============================================================ -->
+    <link rel="manifest" href="/guyton-physiology/manifest.json" />
+    <meta name="theme-color" content="#1a5e7a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="گایتون ۲۰۱۶" />
+    <link rel="apple-touch-icon" href="/guyton-physiology/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/guyton-physiology/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/guyton-physiology/icon-512.png" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <style>
+        /* ===== RESET & BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #f2f7fb;
+            color: #1a2a3a;
+            padding: 16px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            transition: background 0.3s, color 0.3s;
+        }
+        body.dark {
+            background: #1a2630;
+            color: #dce8f0;
+        }
+        .app {
+            max-width: 1100px;
+            width: 100%;
+            background: rgba(255,255,255,0.88);
+            backdrop-filter: blur(6px);
+            border-radius: 40px;
+            padding: 26px 28px 18px;
+            box-shadow: 0 30px 60px -20px rgba(0,20,40,0.35);
+            border: 1px solid rgba(255,255,255,0.4);
+            transition: background 0.3s, border 0.3s;
+            min-height: 90vh;
+        }
+        body.dark .app {
+            background: rgba(26,38,48,0.92);
+            border-color: rgba(255,255,255,0.06);
+        }
+        .page { display: none; animation: fadeIn 0.3s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { 0% { opacity:0; transform:translateY(10px); } 100% { opacity:1; transform:translateY(0); } }
+
+        /* ===== HOME HEADER ===== */
+        .home-header { text-align: center; margin-bottom: 18px; }
+        .home-header .main-title {
+            font-size: 2.4rem; font-weight: 900; letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #0a3147, #1a5e7a);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+            display: inline-block;
+        }
+        body.dark .home-header .main-title {
+            background: linear-gradient(135deg, #8ab8d4, #4a90b0);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        }
+        .home-header .main-title sup {
+            font-size: 0.65em; font-weight: 400; color: #6a8aa0;
+            -webkit-text-fill-color: #6a8aa0; background: none; margin-right: 2px;
+        }
+        body.dark .home-header .main-title sup { color: #7a9aaa; -webkit-text-fill-color: #7a9aaa; }
+        .home-header .sub {
+            font-size: 0.95rem; color: #3a5e7a; background: #dce8f0;
+            display: inline-block; padding: 2px 24px; border-radius: 40px; margin-top: -2px;
+            font-weight: 400; letter-spacing: 0.3px;
+        }
+        body.dark .home-header .sub { background: #2a4050; color: #b0c8d8; }
+        .badge-note {
+            background: #fcf6e7; border: 1px solid #f4c542; border-radius: 30px;
+            padding: 8px 20px; margin: 10px auto 0; display: inline-block;
+            font-size: 0.85rem; color: #1f4055; max-width: 700px;
+        }
+        body.dark .badge-note { background: #2a3a3a; border-color: #b8a040; color: #d0d8d0; }
+        .badge-note i { color: #e68a2e; margin-left: 8px; }
+        .search-box {
+            max-width: 400px; margin: 12px auto 16px; position: relative;
+        }
+        .search-box input {
+            width: 100%; padding: 10px 18px 10px 44px; border-radius: 60px;
+            border: 2px solid #d0dde8; background: white;
+            font-family: 'Vazirmatn', sans-serif; font-size: 0.95rem; outline: none; transition: 0.2s;
+        }
+        body.dark .search-box input { background: #2a3a48; border-color: #4a5a6a; color: #dce8f0; }
+        .search-box input:focus { border-color: #1a5e7a; box-shadow: 0 0 0 4px rgba(26,94,122,0.12); }
+        .search-box i {
+            position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+            color: #7a9bb5; font-size: 1rem;
+        }
+        .toolbar {
+            display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; margin-bottom: 8px;
+        }
+        .toolbar button {
+            background: #eef4fa; border: none; border-radius: 40px; padding: 6px 18px;
+            font-family: 'Vazirmatn', sans-serif; font-weight: 700; font-size: 0.85rem;
+            color: #0a3147; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        body.dark .toolbar button { background: #2a3a48; color: #d0dce8; }
+        .toolbar button:hover { background: #d4e3ed; transform: scale(0.97); }
+        body.dark .toolbar button:hover { background: #3a4a5a; }
+
+        .chapter-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(185px, 1fr));
+            gap: 14px; margin-top: 4px;
+        }
+        .chapter-card {
+            background: white; border-radius: 20px; padding: 16px 12px;
+            box-shadow: 0 4px 12px -4px rgba(0,32,64,0.06);
+            border: 1px solid rgba(0,0,0,0.02); cursor: pointer; transition: 0.25s;
+            text-align: center; display: flex; flex-direction: column; align-items: center; gap: 4px;
+        }
+        body.dark .chapter-card { background: #2a3a48; border-color: #3a4a5a; }
+        .chapter-card:hover { transform: translateY(-4px); box-shadow: 0 12px 28px -10px rgba(18,67,112,0.18); border-color: #bdd0dd; }
+        body.dark .chapter-card:hover { border-color: #5a7a8a; }
+        .chapter-card .num { font-size: 2rem; font-weight: 900; color: #1a5e7a; line-height: 1; }
+        body.dark .chapter-card .num { color: #6aa0c0; }
+        .chapter-card .num i { font-size: 1.5rem; color: #e76f51; margin-left: 6px; }
+        .chapter-card .title { font-weight: 700; font-size: 0.95rem; color: #0a3147; }
+        body.dark .chapter-card .title { color: #d0dce8; }
+        .chapter-card .badge-sm {
+            background: #eef4fa; border-radius: 30px; padding: 0 12px; font-size: 0.7rem;
+            color: #1a5e7a; font-weight: 700;
+        }
+        body.dark .chapter-card .badge-sm { background: #3a4a5a; color: #8ab0c8; }
+        .no-result { grid-column: 1 / -1; text-align: center; padding: 30px; color: #6a8aa0; font-weight: 500; }
+
+        /* ===== CHAPTER PAGE ===== */
+        .chapter-nav {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 10px; margin-bottom: 14px;
+            padding-bottom: 10px; border-bottom: 2px solid #e3ecf3;
+        }
+        body.dark .chapter-nav { border-bottom-color: #3a4a5a; }
+        .chapter-nav .back-btn {
+            background: #eef4fa; border: none; border-radius: 40px; padding: 6px 20px;
+            font-family: 'Vazirmatn', sans-serif; font-weight: 700; font-size: 0.9rem;
+            color: #0a3147; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 6px;
+        }
+        body.dark .chapter-nav .back-btn { background: #2a3a48; color: #d0dce8; }
+        .chapter-nav .back-btn:hover { background: #d4e3ed; transform: scale(0.97); }
+        .chapter-nav .chapter-title { font-size: 1.4rem; font-weight: 800; color: #0a3147; }
+        body.dark .chapter-nav .chapter-title { color: #d0dce8; }
+        .chapter-nav .chapter-title i { color: #e76f51; margin-left: 8px; }
+
+        /* ===== CONTENT STYLES ===== */
+        .chapter-content { font-size: 1rem; }
+        .chapter-content .section {
+            background: white; border-radius: 24px; padding: 18px 20px; margin: 14px 0;
+            box-shadow: 0 4px 12px -6px rgba(0,32,64,0.05); border: 1px solid rgba(0,0,0,0.02);
+        }
+        body.dark .chapter-content .section { background: #26323e; border-color: #3a4a5a; }
+        .chapter-content .section h2 {
+            font-size: 1.4rem; font-weight: 800; color: #0a3147;
+            border-right: 6px solid #2a7f9c; padding-right: 14px; margin-bottom: 8px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        body.dark .chapter-content .section h2 { color: #d0dce8; }
+        .chapter-content .section h2 i { color: #e76f51; font-size: 1.3rem; width: 2rem; }
+        .chapter-content .section h3 {
+            font-weight: 700; color: #1d4b66; margin: 10px 0 4px; font-size: 1.1rem;
+            display: flex; align-items: center; gap: 8px;
+        }
+        body.dark .chapter-content .section h3 { color: #aac0d0; }
+        .chapter-content .section h3 i { color: #2a7f9c; }
+        .chapter-content .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media (max-width:650px) { .chapter-content .grid-2 { grid-template-columns: 1fr; } }
+        .chapter-content .box-blue { background: #eef4fa; border-radius: 18px; padding: 12px 16px; border-right: 4px solid #1a5e7a; }
+        body.dark .chapter-content .box-blue { background: #1a2e3a; border-right-color: #4a8aaa; }
+        .chapter-content .box-gold { background: #fcf6e7; border-radius: 18px; padding: 12px 16px; border-right: 4px solid #f4c542; }
+        body.dark .chapter-content .box-gold { background: #2a2a20; border-right-color: #b8a040; }
+        .chapter-content .box-red { background: #fdeeea; border-radius: 18px; padding: 12px 16px; border-right: 4px solid #e76f51; }
+        body.dark .chapter-content .box-red { background: #2a1e1a; border-right-color: #b85a40; }
+        .chapter-content .box-green { background: #e6f4ea; border-radius: 18px; padding: 12px 16px; border-right: 4px solid #2a7a3a; }
+        body.dark .chapter-content .box-green { background: #1a2a1e; border-right-color: #3a8a4a; }
+        .chapter-content .highlight { background: #dff0f9; border-radius: 16px; padding: 10px 16px; margin: 8px 0; border-right: 5px solid #1a5e7a; }
+        body.dark .chapter-content .highlight { background: #1a2e3a; border-right-color: #4a8aaa; }
+        .chapter-content .highlight i { color: #e68a2e; margin-left: 8px; }
+        .chapter-content .formula-box {
+            background: #eaf3fa; border-radius: 16px; padding: 10px 18px; text-align: center;
+            font-weight: 700; color: #0a3147; border: 2px dashed #2a7f9c; margin: 6px 0;
+        }
+        body.dark .chapter-content .formula-box { background: #1a2e3a; border-color: #4a8aaa; color: #d0dce8; }
+        .chapter-content .table-wrap { overflow-x: auto; border-radius: 16px; background: #f5f9fd; padding: 4px; }
+        body.dark .chapter-content .table-wrap { background: #1a2a36; }
+        .chapter-content table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .chapter-content th { background: #0a3147; color: white; font-weight: 700; padding: 8px 10px; text-align: center; }
+        body.dark .chapter-content th { background: #1a4058; }
+        .chapter-content td { padding: 8px 10px; background: white; border-bottom: 1px solid #e0eaf2; text-align: center; }
+        body.dark .chapter-content td { background: #26323e; border-bottom-color: #3a4a5a; color: #d0dce8; }
+        .chapter-content th:first-child { border-radius: 14px 0 0 0; }
+        .chapter-content th:last-child { border-radius: 0 14px 0 0; }
+        .chapter-content tr:last-child td:first-child { border-radius: 0 0 0 14px; }
+        .chapter-content tr:last-child td:last-child { border-radius: 0 0 14px 0; }
+        .chapter-content .key-number { background: #0a3147; color: white; border-radius: 30px; padding: 0 12px; font-weight: 700; display: inline-block; font-size: 0.8rem; }
+        body.dark .chapter-content .key-number { background: #1a4058; }
+        .chapter-content ul, .chapter-content ol { padding-right: 20px; }
+        .chapter-content ul li, .chapter-content ol li { padding: 2px 0; }
+        .chapter-content .two-col-list { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; }
+        @media (max-width:550px) { .chapter-content .two-col-list { grid-template-columns: 1fr; } }
+        .chapter-content .step-list { list-style: none; padding-right: 0; counter-reset: step; }
+        .chapter-content .step-list li { counter-increment: step; padding: 4px 0; display: flex; align-items: flex-start; gap: 10px; }
+        .chapter-content .step-list li::before {
+            content: counter(step); background: #1a5e7a; color: white; border-radius: 50%;
+            width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.75rem; flex-shrink: 0; margin-top: 2px;
+        }
+        body.dark .chapter-content .step-list li::before { background: #3a7a9a; }
+        .chapter-content .flex-row {
+            display: flex; flex-wrap: wrap; gap: 8px 16px; background: #f5f9fd;
+            border-radius: 18px; padding: 10px 16px; margin: 4px 0; border: 1px solid #d0dde8;
+        }
+        body.dark .chapter-content .flex-row { background: #1a2a36; border-color: #3a4a5a; }
+        .chapter-content .flex-row span { display: flex; align-items: center; gap: 4px; font-weight: 500; }
+        .chapter-content .footnote-chapter {
+            background: #eef3f7; border-radius: 30px; padding: 12px 22px; margin: 16px 0 4px;
+            color: #1f4055; border: 1px solid #cbdce8; display: flex; align-items: center;
+            gap: 12px; flex-wrap: wrap; font-size: 0.9rem;
+        }
+        body.dark .chapter-content .footnote-chapter { background: #1a2a36; border-color: #3a4a5a; color: #b0c8d8; }
+        .chapter-content .footnote-chapter i { color: #1a7a3a; font-size: 1.4rem; }
+        .brand-footer {
+            text-align: center; margin-top: 22px; padding-top: 12px;
+            border-top: 1px solid #d0dde8; font-size: 0.7rem; font-weight: 300;
+            color: #a0b8cc; letter-spacing: 1px;
+        }
+        body.dark .brand-footer { border-top-color: #3a4a5a; color: #5a7a8a; }
+        @media (max-width:550px) {
+            .app { padding: 14px; }
+            .home-header .main-title { font-size: 1.6rem; }
+            .home-header .sub { font-size: 0.8rem; padding: 2px 16px; }
+            .chapter-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+            .chapter-card { padding: 12px 8px; }
+            .chapter-card .num { font-size: 1.6rem; }
+            .chapter-nav .chapter-title { font-size: 1.1rem; }
+            .chapter-content { font-size: 0.95rem; }
+            .chapter-content .section { padding: 14px 14px; }
+            .toolbar button { font-size: 0.75rem; padding: 4px 14px; }
+        }
+        @media (min-width:768px) { .chapter-content { font-size: 1.05rem; } }
+    </style>
+</head>
+<body>
+<div class="app" id="app">
+
+    <!-- ========================================================= -->
+    <!-- PAGE: HOME -->
+    <!-- ========================================================= -->
+    <div class="page active" id="page-home">
+        <div class="home-header">
+            <div class="main-title">فیزیولوژی گایتون <sup>۲۰۱۶</sup></div>
+            <div class="sub">خلاصه مفاهیم کلیدی · ۱۵ فصل</div>
+            <div class="badge-note">
+                <i class="fas fa-info-circle"></i>
+                این خلاصه از مفاهیم کلیدی کتاب <strong>خلاصه فیزیولوژی گایتون/هال ۲۰۱۶</strong> است.
+                مطالعه آن به عنوان <strong>مکمل</strong> کتاب اصلی توصیه می‌شود.
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="جستجوی فصل ..." onkeyup="filterChapters()" />
+            </div>
+            <div class="toolbar">
+                <button onclick="toggleDarkMode()"><i class="fas fa-moon"></i> حالت شب</button>
+                <button onclick="window.print()"><i class="fas fa-print"></i> چاپ</button>
+            </div>
+        </div>
+        <div class="chapter-grid" id="chapterGrid"></div>
+        <div class="brand-footer">Mr.Lee</div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE: CHAPTER -->
+    <!-- ========================================================= -->
+    <div class="page chapter-page" id="page-chapter">
+        <div class="chapter-nav">
+            <button class="back-btn" onclick="goHome()"><i class="fas fa-arrow-right"></i> فهرست</button>
+            <div class="chapter-title" id="chapterTitle"><i class="fas fa-book"></i> فصل</div>
+            <div style="display:flex; gap:6px;">
+                <button class="back-btn" onclick="window.print()" style="background:#dce8f0; padding:6px 14px; font-size:0.8rem;"><i class="fas fa-print"></i></button>
+                <button class="back-btn" onclick="toggleDarkMode()" style="background:#dce8f0; padding:6px 14px; font-size:0.8rem;"><i class="fas fa-moon"></i></button>
+            </div>
+        </div>
+        <div class="chapter-content" id="chapterContent"></div>
+        <div style="margin-top:14px; text-align:center;">
+            <button class="back-btn" onclick="goHome()" style="background:#dce8f0; border:none; border-radius:40px; padding:6px 24px; font-family:'Vazirmatn',sans-serif; font-weight:700; font-size:0.9rem; color:#0a3147; cursor:pointer;">
+                <i class="fas fa-arrow-right"></i> بازگشت به فهرست
+            </button>
+        </div>
+        <div class="brand-footer" style="margin-top:14px;">Mr.Lee</div>
+    </div>
+
+</div>
+
+<script>
+    // ============================================================
+    //  ۱. ثبت Service Worker (هماهنگ با sw.js)
+    // ============================================================
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/guyton-physiology/sw.js')
+                .then(function(registration) {
+                    console.log('✅ Service Worker ثبت شد با موفقیت:', registration);
+                })
+                .catch(function(error) {
+                    console.log('❌ خطا در ثبت Service Worker:', error);
+                });
+        });
+    }
+
+    // ============================================================
+    //  ۲. داده‌های ۱۵ فصل
+    // ============================================================
+    const chapters = [
+        // ===== فصل ۱ =====
+        {
+            id: 1,
+            title: 'فیزیولوژی عمومی و سلول',
+            icon: 'fa-solid fa-microscope',
+            color: '#1a5e7a',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-scale-balanced"></i> همئوستاز (Homeostasis)</h2>
+                    <p><strong>تعریف:</strong> حفظ شرایط تقریباً ثابت در <strong>محیط داخلی</strong> (مایع خارج سلولی).</p>
+                    <div class="highlight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>نکته کلیدی:</strong> تمام ارگان‌های بدن برای حفظ همئوستاز تلاش می‌کنند:
+                        <ul style="margin-top:6px; list-style:disc; padding-right:24px;">
+                            <li>دستگاه تنفس ← تنظیم گازها</li>
+                            <li>دستگاه گوارش ← تنظیم مواد غذایی</li>
+                            <li>دستگاه کلیوی ← تنظیم یون‌ها و مایعات</li>
+                        </ul>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-history"></i> <strong>کلود برنارد</strong> (فیزیولوژیست فرانسوی) بیش از ۱۰۰ سال پیش اصطلاح <strong>«محیط داخلی»</strong> را برای مایع خارج سلولی، خون و لنف به کار برد.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-droplet"></i> مایعات بدن (ECF &amp; ICF)</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-water"></i> مایع خارج سلولی (ECF)</h3>
+                            <ul style="list-style: none; padding-right: 0;">
+                                <li><i class="fas fa-check-circle" style="color:#1a5e7a;"></i> یک‌سوم آب بدن (۲۰٪ وزن)</li>
+                                <li><i class="fas fa-check-circle" style="color:#1a5e7a;"></i> <strong>سدیم</strong> بالا، کلر، بی‌کربنات</li>
+                                <li><i class="fas fa-check-circle" style="color:#1a5e7a;"></i> اکسیژن، گلوکز، اسیدهای چرب</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-house-chimney"></i> مایع داخل سلولی (ICF)</h3>
+                            <ul style="list-style: none; padding-right: 0;">
+                                <li><i class="fas fa-check-circle" style="color:#b1653b;"></i> دو‌سوم آب بدن (۴۰٪ وزن)</li>
+                                <li><i class="fas fa-check-circle" style="color:#b1653b;"></i> <strong>پتاسیم</strong> بالا، منیزیم، فسفات</li>
+                                <li><i class="fas fa-check-circle" style="color:#b1653b;"></i> پروتئین‌های داخل سلولی</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight" style="background:#fcf6e7; border-right-color:#f4c542;">
+                        <i class="fas fa-gem" style="color:#f4c542;"></i>
+                        <strong>نکته کلیدی:</strong> «سدیم بیرونه، پتاسیم درونه!»  
+                        <span style="display:block; margin-top:4px; font-size:0.95rem;">این ترکیب برای پتانسیل غشا و انتقال پیام عصبی حیاتی است.</span>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-table"></i> جدول ۱-۱: ترکیبات مهم ECF</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>ماده</th><th>مقدار طبیعی</th><th>محدوده طبیعی</th><th>واحد</th></tr></thead>
+                            <tbody>
+                                <tr><td>اکسیژن (وریدی)</td><td>۴۰</td><td>۳۵-۴۵</td><td>mmHg</td></tr>
+                                <tr><td>CO₂ (وریدی)</td><td>۴۵</td><td>۳۵-۴۵</td><td>mmHg</td></tr>
+                                <tr><td><strong>یون سدیم</strong></td><td>۱۴۲</td><td>۱۳۸-۱۴۶</td><td>mEq/L</td></tr>
+                                <tr><td><strong>یون پتاسیم</strong></td><td>۴/۲</td><td>۳/۸-۵</td><td>mEq/L</td></tr>
+                                <tr><td>یون کلسیم</td><td>۱/۲</td><td>۱-۱/۴</td><td>mEq/L</td></tr>
+                                <tr><td>کلر</td><td>۱۰۸</td><td>۱۰۳-۱۱۲</td><td>mEq/L</td></tr>
+                                <tr><td>بی‌کربنات</td><td>۲۴</td><td>۲۴-۳۲</td><td>mEq/L</td></tr>
+                                <tr><td>گلوکز</td><td>۹۰</td><td>۷۵-۹۵</td><td>mg/dL</td></tr>
+                                <tr><td>دمای بدن</td><td>۹۸/۴ (۳۷)</td><td>۹۸-۹۸/۸</td><td>°F (°C)</td></tr>
+                                <tr><td>pH</td><td>۷/۴</td><td>۷/۳-۷/۵</td><td>—</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-red" style="margin-top:12px;">
+                        <i class="fas fa-exclamation-triangle" style="color:#c44545;"></i>
+                        <strong>توجه:</strong> تغییر pH از ۷/۴ به ۶/۹ باعث مرگ موجود زنده می‌شود.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-arrow-down"></i> فیدبک منفی</h2>
+                    <p><strong>تعریف:</strong> تغییر یک عامل باعث واکنش‌هایی می‌شود که آن عامل را به حد طبیعی باز می‌گرداند.</p>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-lungs"></i> مثال: تنظیم CO₂</h3>
+                            <ul>
+                                <li>↑ CO₂ خون ← ↑ تهویه ریوی ← ↓ CO₂</li>
+                                <li>↓ CO₂ خون ← ↓ تهویه ریوی ← ↑ CO₂</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-heart"></i> مثال: فشار خون</h3>
+                            <ul>
+                                <li>↑ فشار خون ← بارورسپتورها فعال ← ↓ فشار</li>
+                                <li>↓ فشار خون ← بارورسپتورها غیرفعال ← ↑ فشار</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="formula-box">
+                        <i class="fas fa-calculator" style="margin-left:12px;"></i>
+                        Gain = میزان تصحیح ÷ میزان خطا
+                        <span style="display:block; font-size:0.9rem; font-weight:400; color:#3a5e7a;">
+                            مثال: فشار از ۱۷۵ به ۱۲۵ رسید ← Gain = ۵۰ ÷ ۲۵ = ۲
+                        </span>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-arrow-up"></i> فیدبک مثبت</h2>
+                    <p><strong>تعریف:</strong> ایجاد چرخه معیوب که باعث تشدید و افزایش واکنش می‌شود.</p>
+                    <div class="grid-2">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-droplet"></i> لخته شدن خون</h3>
+                            <ul>
+                                <li>پارگی رگ ← فعال‌سازی فاکتورهای لخته</li>
+                                <li>فاکتورهای فعال ← فعال‌سازی فاکتورهای دیگر (آبشاری)</li>
+                                <li>نهایتاً ← قطع خونریزی</li>
+                            </ul>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-baby"></i> زایمان</h3>
+                            <ul>
+                                <li>فشار سر نوزاد به گردن رحم</li>
+                                <li>↑ انقباضات رحمی ← ↑ فشار بیشتر</li>
+                                <li>ادامه تا خروج نوزاد</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-bolt" style="color:#e68a2e;"></i>
+                        <strong>مثال دیگر:</strong> تولید پتانسیل عمل (ورود سدیم ← کاهش بار منفی ← باز شدن کانال‌های سدیمی بیشتر)
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-flask"></i> ترکیبات داخل سلولی</h2>
+                    <div class="grid-2">
+                        <div><h3><i class="fas fa-solid fa-water"></i> آب</h3><p>مایع مهم داخل سلول، محل انجام واکنش‌های شیمیایی</p></div>
+                        <div><h3><i class="fas fa-solid fa-bolt"></i> یون‌ها</h3><p><strong>پتاسیم، منیزیم، فسفات، سولفات، بی‌کربنات</strong></p></div>
+                        <div><h3><i class="fas fa-solid fa-dna"></i> پروتئین‌ها</h3><p>ساختاری (فیلامان‌ها) و آنزیم‌ها (کاتالیز واکنش‌ها)</p></div>
+                        <div><h3><i class="fas fa-solid fa-oil-can"></i> چربی‌ها</h3><p>کلسترول، فسفولیپید (ساختمان غشا) و تری‌گلیسرید (ذخیره انرژی)</p></div>
+                        <div><h3><i class="fas fa-solid fa-candy-cane"></i> کربوهیدرات‌ها</h3><p>تأمین انرژی سلول‌ها و بافت‌ها</p></div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-microscope"></i> ساختار فیزیکی سلول</h2>
+                    <h3><i class="fas fa-solid fa-border-all"></i> غشای سلول</h3>
+                    <ul>
+                        <li><strong>ترکیب:</strong> ۵۵٪ پروتئین، ۲۵٪ فسفولیپید، ۱۳٪ کلسترول، ۴٪ سایر چربی‌ها، ۳٪ کربوهیدرات</li>
+                        <li><strong>پروتئین‌های سرتاسری:</strong> کانال‌های یونی، حامل‌ها، پمپ‌ها، گیرنده‌های هورمونی</li>
+                        <li><strong>پروتئین‌های محیطی:</strong> عمل آنزیمی</li>
+                        <li><strong>گلیکوکالیکس:</strong> پوشش کربوهیدراتی، دارای بار منفی، نقش در اتصال سلول‌ها و ایمنی</li>
+                    </ul>
+                    <h3><i class="fas fa-solid fa-circle-nodes"></i> سیتوپلاسم و اندامک‌ها</h3>
+                    <ul>
+                        <li><strong>سیتوزول:</strong> مایع متراکم داخل سیتوپلاسم</li>
+                        <li><strong>شبکه آندوپلاسمی:</strong> کیسه‌های پهن و لوله‌ای، حاوی ماتریکس آندوپلاسمی</li>
+                        <li><strong>میتوکندری:</strong> تولید انرژی ATP</li>
+                        <li><strong>ریبوزوم‌ها:</strong> ساخت پروتئین</li>
+                    </ul>
+                    <h3><i class="fas fa-solid fa-dna"></i> هسته و ژن‌ها</h3>
+                    <ul>
+                        <li><strong>DNA:</strong> فسفریک اسید + دئوکسی ریبوز + بازهای نیتروژن‌دار (آدنین، گوانین، تیمین، سیتوزین)</li>
+                        <li><strong>کدون:</strong> هر ۳ نوکلئوتید = یک کد ژنتیکی</li>
+                        <li><strong>ژن:</strong> الگوی سنتز یک پروتئین</li>
+                        <li><strong>mRNA:</strong> کپی از DNA، به سیتوپلاسم رفته و الگوی ساخت پروتئین می‌شود</li>
+                        <li><strong>splicing:</strong> حذف اینترون‌ها و باقی‌ماندن اگزون‌ها در mRNA نهایی</li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-arrow-right-to-bracket"></i> اندوسیتوز</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-circle-dot"></i> پینوسیتوز</h3><p>ورود <strong>ماکرومولکول‌ها</strong> مثل پروتئین‌ها به داخل سلول</p></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-bacteria"></i> فاگوسیتوز</h3><p>بلعیدن <strong>جسم بزرگ</strong> مثل باکتری توسط سلول و هضم آن</p></div>
+                    </div>
+                    <div class="highlight" style="background:#f5f9fd;">
+                        <i class="fas fa-arrow-trend-up"></i>
+                        مکانیسم: اتصال ذره به سطح سلول ← فرورفتگی ← تشکیل وزیکول ← ورود به داخل سلول
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-people-arrows"></i> حرکت سلول‌ها و مرگ سلولی</h2>
+                    <div class="grid-2">
+                        <div>
+                            <h3><i class="fas fa-solid fa-person-walking"></i> حرکت آمیبی</h3>
+                            <p>برخی سلول‌ها مثل گلبول‌های سفید برای از بین‌بردن میکروب‌ها از مویرگ‌ها عبور می‌کنند. همچنین در مرحله تکامل جنینی رخ می‌دهد.</p>
+                        </div>
+                        <div>
+                            <h3><i class="fas fa-solid fa-skull"></i> آپوپتوز vs نکروز</h3>
+                            <div style="background:#fdeeea; border-radius:14px; padding:12px 16px; margin-top:6px;">
+                                <p><strong>آپوپتوز:</strong> مرگ <strong>برنامه‌ریزی شده</strong> (خودخواسته) – سلول چروکیده می‌شود و ماکروفاژها آن را بلع می‌کنند.</p>
+                                <p style="margin-top:8px;"><strong>نکروز:</strong> مرگ <strong>ناشی از آسیب</strong> (غیرخواسته) – سلول متورم شده و از بین می‌رود.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>همئوستاز</strong> = حفظ تعادل محیط داخلی (ECF)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ECF</strong> = ۲۰٪ وزن، سدیم بالا</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ICF</strong> = ۴۰٪ وزن، پتاسیم بالا</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فیدبک منفی</strong> = تثبیت (CO₂، فشار خون)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فیدبک مثبت</strong> = تشدید (زایمان، لخته)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>غشا</strong> = ۵۵٪ پروتئین، ۲۵٪ فسفولیپید</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>DNA</strong> = فسفریک اسید + دئوکسی ریبوز + بازها</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>آپوپتوز</strong> = مرگ برنامه‌ریزی شده</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل همئوستاز، ECF/ICF، فیدبک‌ها، ترکیبات سلول، غشاء، DNA، اندوسیتوز و آپوپتوز می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۲ =====
+        {
+            id: 2,
+            title: 'فیزیولوژی غشاء عصب و عضله',
+            icon: 'fa-solid fa-bolt',
+            color: '#c44545',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-arrow-right-arrow-left"></i> انتقال مواد از غشاء سلولی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-water"></i> انتشار ساده</h3>
+                            <p>حرکت مولکول‌ها از غلظت بالا به پایین، بدون نیاز به انرژی و بدون پروتئین حامل.</p>
+                            <p style="font-size:0.9rem; color:#3a5e7a;">مثال: O₂، CO₂، الکل</p>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-hand-holding"></i> انتشار تسهیل‌شده</h3>
+                            <p>حرکت مولکول‌ها با کمک پروتئین حامل، بدون مصرف انرژی، <strong>قابل اشباع</strong>.</p>
+                            <p style="font-size:0.9rem; color:#3a5e7a;">مثال: گلوکز، اسیدهای آمینه</p>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> انتشار تسهیل‌شده <strong>قابل اشباع</strong> است (با افزایش غلظت، به حداکثر می‌رسد) ولی انتشار ساده چنین نیست.
+                    </div>
+                    <div class="grid-2" style="margin-top:12px;">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-bolt"></i> انتقال فعال اولیه</h3>
+                            <p>انتقال در خلاف شیب غلظت با مصرف مستقیم ATP.</p>
+                            <p style="font-size:0.9rem; color:#3a5e7a;"><strong>پمپ سدیم-پتاسیم:</strong> ۳ Na⁺ خارج، ۲ K⁺ داخل</p>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-share"></i> انتقال فعال ثانویه</h3>
+                            <p>استفاده از گرادیان یونی (معمولاً سدیم) برای انتقال ماده دیگر.</p>
+                            <p style="font-size:0.9rem; color:#3a5e7a;">مثال: هم‌انتقالی گلوکز با سدیم در روده</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-battery-three-quarters"></i> پتانسیل استراحت غشاء</h2>
+                    <div class="grid-2">
+                        <div>
+                            <h3><i class="fas fa-solid fa-minus-circle"></i> مقدار</h3>
+                            <p><span class="key-number">-۷۰ تا -۹۰</span> میلی‌ولت (عصب و عضله اسکلتی)</p>
+                            <p style="font-size:0.9rem; color:#3a5e7a;">عضله صاف: -۵۰ تا -۶۰ میلی‌ولت</p>
+                        </div>
+                        <div>
+                            <h3><i class="fas fa-solid fa-microscope"></i> علت</h3>
+                            <ul>
+                                <li>نفوذپذیری بیشتر غشاء به K⁺ نسبت به Na⁺</li>
+                                <li>خروج K⁺ از سلول ← بار منفی داخل</li>
+                                <li>پمپ Na⁺/K⁺ حفظ گرادیان یونی</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>نکته کلیدی:</strong> پتانسیل استراحت عمدتاً توسط <strong>نفوذپذیری به پتاسیم</strong> تعیین می‌شود. پمپ Na⁺/K⁺ فقط گرادیان را حفظ می‌کند.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-bolt"></i> پتانسیل عمل</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;">مراحل</h3>
+                            <ul>
+                                <li><strong>دپلاریزاسیون (فاز صعودی):</strong> باز شدن کانال‌های سدیمی ← ورود Na⁺ ← مثبت شدن داخل</li>
+                                <li><strong>رپلاریزاسیون (فاز نزولی):</strong> بسته شدن کانال‌های سدیمی ← باز شدن کانال‌های پتاسیمی ← خروج K⁺</li>
+                                <li><strong>هایپرپلاریزاسیون:</strong> خروج بیش از حد K⁺ ← منفی‌تر شدن موقت</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;">کانال‌های ولتاژی</h3>
+                            <ul>
+                                <li><strong>کانال سدیمی:</strong> سریع باز و بسته می‌شود. دو دریچه: فعال‌سازی + غیرفعال‌سازی</li>
+                                <li><strong>کانال پتاسیمی:</strong> آهسته باز می‌شود. فقط یک دریچه</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> پتانسیل آستانه ≈ -۶۵ تا -۵۵ میلی‌ولت. در این نقطه، کانال‌های سدیمی به صورت <strong>فیدبک مثبت</strong> باز می‌شوند.
+                    </div>
+                    <div class="grid-2" style="margin-top:12px;">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-ban"></i> تحریک‌ناپذیری مطلق</h3>
+                            <p>در طی دپلاریزاسیون و اوایل رپلاریزاسیون. حتی با محرک قوی هم پتانسیل عمل ایجاد نمی‌شود.</p>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-exclamation-triangle"></i> تحریک‌ناپذیری نسبی</h3>
+                            <p>اواخر رپلاریزاسیون. با محرک قوی‌تر می‌توان پتانسیل عمل ایجاد کرد.</p>
+                        </div>
+                    </div>
+                    <div class="highlight" style="background:#eaf3fa;">
+                        <i class="fas fa-solid fa-forward"></i>
+                        <strong>هدایت جهشی (Saltatory):</strong> در فیبرهای میلین‌دار، پتانسیل عمل از یک گره رانویه به گره بعدی می‌پرد. سرعت بیشتر و مصرف انرژی کمتر.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-dumbbell"></i> عضله اسکلتی</h2>
+                    <div class="grid-2">
+                        <div>
+                            <h3><i class="fas fa-solid fa-building"></i> ساختار</h3>
+                            <ul>
+                                <li><strong>سارکومر:</strong> واحد انقباضی، از خط Z تا خط Z بعدی</li>
+                                <li><strong>باند A:</strong> نوار تیره (میوزین + اکتین هم‌پوشان)</li>
+                                <li><strong>باند I:</strong> نوار روشن (فقط اکتین)</li>
+                                <li><strong>خط Z:</strong> مرز سارکومر، محل اتصال اکتین</li>
+                                <li><strong>خط M:</strong> وسط باند A، محل اتصال میوزین</li>
+                                <li><strong>صفحه H:</strong> وسط باند A، فقط میوزین</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <ul>
+                                <li><strong>اکتین:</strong> فیلامان نازک، دارای جایگاه اتصال میوزین</li>
+                                <li><strong>میوزین:</strong> فیلامان ضخیم، دارای سر (ATPase)</li>
+                                <li><strong>تروپومیوزین:</strong> می‌پوشاند جایگاه اکتین در حالت استراحت</li>
+                                <li><strong>تروپونین (Tn):</strong> TnC (اتصال کلسیم)، TnI (اتصال اکتین)، TnT (اتصال تروپومیوزین)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3><i class="fas fa-solid fa-gears"></i> مکانیسم مولکولی انقباض (نظریه لغزنده)</h3>
+                    <ol style="padding-right:24px;">
+                        <li>ورود کلسیم به سارکوپلاسم ← اتصال به TnC</li>
+                        <li>تغییر شکل تروپونین ← کشیده شدن تروپومیوزین ← آشکار شدن جایگاه اکتین</li>
+                        <li>اتصال سر میوزین به اکتین (تشکیل پل عرضی)</li>
+                        <li>تغییر زاویه سر میوزین ← لغزیدن اکتین روی میوزین (انقباض)</li>
+                        <li>اتصال ATP به میوزین ← جدا شدن از اکتین</li>
+                        <li>هیدرولیز ATP ← بازگشت سر میوزین به حالت اولیه</li>
+                    </ol>
+                    <div class="formula-box">
+                        <i class="fas fa-solid fa-dna"></i>
+                        چرخه پل‌های عرضی: <strong>اتصال ← حرکت ← جداسازی ← بازگشت</strong>
+                        <span style="display:block; font-size:0.9rem; font-weight:400; color:#3a5e7a;">تا زمانی که کلسیم و ATP موجود باشد، چرخه ادامه می‌یابد.</span>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> در حالت استراحت، تروپومیوزین جایگاه اکتین را پوشانده. <strong>کلسیم</strong> کلید شروع انقباض است. <strong>ATP</strong> برای جداسازی میوزین از اکتین ضروری است.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-syringe"></i> اتصال عصبی-عضلانی</h2>
+                    <ol class="step-list">
+                        <li>رسیدن پتانسیل عمل به انتهای آکسون ← باز شدن کانال‌های کلسیمی ← ورود Ca²⁺</li>
+                        <li>اتصال وزیکول‌های حاوی استیل‌کولین به غشای پیش‌سیناپسی</li>
+                        <li>آزاد شدن استیل‌کولین (ACh) به شکاف سیناپسی</li>
+                        <li>اتصال ACh به گیرنده‌های نیکوتینی (۲ زیرواحد α) ← باز شدن کانال ← ورود Na⁺</li>
+                        <li>ایجاد <strong>پتانسیل صفحه انتهایی (EPP)</strong> ← دپلاریزاسیون موضعی</li>
+                        <li>تولید پتانسیل عمل در فیبر عضلانی ← انتشار در طول توبول‌های T</li>
+                        <li>تجزیه ACh توسط <strong>استیل‌کولین استراز</strong> ← پایان تحریک</li>
+                    </ol>
+                    <div class="grid-2" style="margin-top:12px;">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-pills"></i> داروهای تحریکی</h3>
+                            <p>متاکولین، کارباکول، نیکوتین ← مانند ACh اثر می‌کنند اما توسط استراز تجزیه نمی‌شوند.</p>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-ban"></i> مهارکننده‌ها</h3>
+                            <p><strong>کورار:</strong> مهار گیرنده ACh. <strong>نئوستیگمین:</strong> مهار استیل‌کولین استراز (افزایش ACh).</p>
+                        </div>
+                    </div>
+                    <div class="box-gold" style="margin-top:12px;">
+                        <i class="fas fa-heartbeat"></i>
+                        <strong>میاستنی گراویس:</strong> بیماری خودایمنی با آنتی‌بادی علیه گیرنده ACh. درمان با مهارکننده‌های استیل‌کولین استراز (نئوستیگمین).
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-tachometer-alt"></i> فیبرهای تند و کند انقباض</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>ویژگی</th><th>تند انقباض (نوع II)</th><th>کند انقباض (نوع I)</th></tr></thead>
+                            <tbody>
+                                <tr><td>قطر فیبر</td><td>بزرگ</td><td>کوچک</td></tr>
+                                <tr><td>رنگ</td><td>سفید</td><td>قرمز (میوگلوبین بالا)</td></tr>
+                                <tr><td>شبکه سارکوپلاسمی</td><td>گسترده</td><td>محدود</td></tr>
+                                <tr><td>آنزیم‌های گلیکولیتیک</td><td>زیاد</td><td>کم</td></tr>
+                                <tr><td>میتوکندری</td><td>کم</td><td>زیاد</td></tr>
+                                <tr><td>متابولیسم</td><td>بی‌هوازی (گلیکولیز)</td><td>هوازی (اکسیداتیو)</td></tr>
+                                <tr><td>عروق خونی</td><td>کم</td><td>زیاد</td></tr>
+                                <tr><td>مقاومت به خستگی</td><td>کم</td><td>زیاد</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-chart-bar"></i> انواع انقباض و مفاهیم</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrows-up-down"></i> ایزومتریک</h3>
+                            <p>طول عضله ثابت، نیرو افزایش می‌یابد. (مثلاً نگه‌داشتن وزنه)</p>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrows-left-right"></i> ایزوتونیک</h3>
+                            <p>طول عضله کوتاه می‌شود، نیرو ثابت می‌ماند. (مثلاً بلند کردن وزنه)</p>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-fire"></i> کزاز (تتانی)</h3>
+                            <p>جمع شدن انقباضات مکرر با فاصله کم ← انقباض پایدار و قوی</p>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-stairs"></i> اثر پلکانی (Treppe)</h3>
+                            <p>انقباضات اول ضعیف‌تر از انقباضات بعدی. علت: تجمع کلسیم در سارکوپلاسم.</p>
+                        </div>
+                    </div>
+                    <div class="highlight" style="background:#fdeeea; border-right-color:#e76f51;">
+                        <i class="fas fa-solid fa-skull"></i>
+                        <strong>جمود نعشی (Rigor Mortis):</strong> پس از مرگ، ATP تمام می‌شود ← میوزین از اکتین جدا نمی‌شود ← سفتی عضلات. از چند ساعت تا ۱۵-۲۵ ساعت بعد از مرگ ادامه دارد.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-circle"></i> عضله صاف</h2>
+                    <div class="grid-2">
+                        <div>
+                            <h3><i class="fas fa-solid fa-list-check"></i> تفاوت با عضله اسکلتی</h3>
+                            <ul>
+                                <li>فاقد تروپونین ← دارد <strong>کالمودولین</strong></li>
+                                <li>کلسیم از <strong>مایع خارج سلولی</strong> تأمین می‌شود</li>
+                                <li>پتانسیل استراحت متغیرتر (-۵۰ تا -۶۰ mV)</li>
+                                <li>کانال‌های کلسیمی بیشتر از سدیمی</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3><i class="fas fa-solid fa-microscope"></i> مکانیسم انقباض</h3>
+                            <ul>
+                                <li>Ca²⁺ ← اتصال به کالمودولین ← فعال‌سازی میوزین کیناز</li>
+                                <li>فسفریلاسیون زنجیره سبک میوزین ← اتصال به اکتین</li>
+                                <li>دفسفریلاسیون توسط میوزین فسفاتاز ← شل شدن</li>
+                                <li><strong>مکانیسم قفل شدن (Latch):</strong> انقباض طولانی با مصرف کم انرژی</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> در عضله صاف، کلسیم از <strong>مایع خارج سلولی</strong> وارد می‌شود (برخلاف عضله اسکلتی که از شبکه سارکوپلاسمی تأمین می‌شود).
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>انتشار ساده:</strong> بدون حامل، بدون ATP، خطی</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>انتشار تسهیل‌شده:</strong> با حامل، بدون ATP، قابل اشباع</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پمپ Na⁺/K⁺:</strong> ۳ خارج، ۲ داخل، مصرف ATP</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پتانسیل استراحت:</strong> نفوذپذیری به K⁺</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پتانسیل عمل:</strong> Na⁺ (دپلاریزاسیون) ← K⁺ (رپلاریزاسیون)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>انقباض عضله:</strong> کلسیم ← تروپونین ← اکتین-میوزین</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>عضله صاف:</strong> کالمودولین ← میوزین کیناز</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>جمود نعشی:</strong> کمبود ATP</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل انتقال از غشاء، پتانسیل استراحت، پتانسیل عمل، عضله اسکلتی، اتصال عصبی-عضلانی، فیبرهای عضلانی و عضله صاف می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۳ =====
+        {
+            id: 3,
+            title: 'قلب',
+            icon: 'fa-solid fa-heart',
+            color: '#c44545',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-heart"></i> آناتومی فیزیولوژیک قلب</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-building"></i> ساختار</h3>
+                            <ul>
+                                <li>قلب از <strong>دو پمپ</strong> تشکیل شده: راست (ریه‌ها) و چپ (بقیه بدن)</li>
+                                <li>عضله قلبی <strong>مخطط</strong> است (مانند اسکلتی)</li>
+                                <li>فیبرهای عضله قلبی در یک <strong>شبکه</strong> مرتب شده‌اند</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-link"></i> سینسیتیوم</h3>
+                            <ul>
+                                <li><strong>صفحات بین‌آیینه (Intercalated discs):</strong> محل اتصال فیبرها</li>
+                                <li><strong>اتصالات شکاف‌دار (Gap junctions):</strong> عبور سریع یون‌ها بین سلول‌ها</li>
+                                <li><strong>سینسیتیوم دهلیزی</strong> و <strong>سینسیتیوم بطنی</strong> (جدا از هم)</li>
+                                <li>اتصال دهلیزها به بطن‌ها از طریق <strong>دسته AV</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="highlight">
+                        <i class="fas fa-lightbulb"></i>
+                        <strong>نکته کلیدی:</strong> عضله قلبی به دلیل اتصالات شکاف‌دار به صورت <strong>یکپارچه</strong> منقبض می‌شود. دهلیزها و بطن‌ها توسط بافت فیبری از هم جدا شده‌اند.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-bolt"></i> پتانسیل عمل عضله قلبی</h2>
+                    <p>پتانسیل عمل قلبی به شکل <strong>کفه‌ای</strong> است (برخلاف نیزه‌ای در عصب و عضله اسکلتی).</p>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;">فازها</h3>
+                            <ul>
+                                <li><strong><span class="badge-sm" style="background:#1a5e7a;">فاز ۰</span> دپلاریزاسیون:</strong> باز شدن کانال‌های سدیمی سریع ← ورود Na⁺</li>
+                                <li><strong><span class="badge-sm" style="background:#1a5e7a;">فاز ۱</span> رپلاریزاسیون اولیه:</strong> بسته شدن کانال‌های سدیمی ← باز شدن کانال‌های پتاسیمی</li>
+                                <li><strong><span class="badge-sm" style="background:#1a5e7a;">فاز ۲</span> کفه (Plateau):</strong> باز شدن کانال‌های کلسیمی آهسته ← ورود Ca²⁺ (همزمان با خروج K⁺)</li>
+                                <li><strong><span class="badge-sm" style="background:#1a5e7a;">فاز ۳</span> رپلاریزاسیون سریع:</strong> بسته شدن کانال‌های کلسیمی ← خروج K⁺</li>
+                                <li><strong><span class="badge-sm" style="background:#1a5e7a;">فاز ۴</span> استراحت:</strong> پتانسیل استراحت (-۹۰ تا -۸۵ mV)</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;">کانال‌ها</h3>
+                            <ul>
+                                <li><strong>کانال سدیمی سریع:</strong> فاز ۰ (مثل عضله اسکلتی)</li>
+                                <li><strong>کانال کلسیمی آهسته (Ca²⁺-Na⁺):</strong> فاز ۲ (بسیار آهسته باز می‌شود)</li>
+                                <li><strong>کانال پتاسیمی:</strong> فاز ۳ (خروج K⁺)</li>
+                            </ul>
+                            <div class="box-gold" style="margin-top:8px; font-size:0.9rem;">
+                                <i class="fas fa-gem"></i> علت کفه: ورود Ca²⁺ با خروج K⁺ همزمان می‌شود.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="grid-2" style="margin-top:12px;">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-ban"></i> تحریک‌ناپذیری مطلق</h3>
+                            <p>در طی فاز ۰ تا اواسط فاز ۳. حتی با محرک قوی هم پتانسیل عمل ایجاد نمی‌شود.</p>
+                            <p style="font-size:0.9rem; color:#3a5e7a;">مدت: ~۰/۲۵-۰/۳۰ ثانیه (هم‌اندازه با کفه)</p>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-exclamation-triangle"></i> تحریک‌ناپذیری نسبی</h3>
+                            <p>اواخر فاز ۳. با محرک قوی‌تر می‌توان پتانسیل عمل ایجاد کرد.</p>
+                            <p style="font-size:0.9rem; color:#3a5e7a;">مدت: ~۰/۰۵ ثانیه</p>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> پتانسیل عمل طولانی قلبی از <strong>انقباض تتانی</strong> (کزاز) جلوگیری می‌کند و به قلب اجازه می‌دهد بین ضربان‌ها پر شود.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-link"></i> مزدوج‌شدن تحریک-انقباض</h2>
+                    <div class="grid-2">
+                        <div>
+                            <h3><i class="fas fa-solid fa-arrows-up-down"></i> توبول‌های T</h3>
+                            <ul>
+                                <li>قطر <strong>۵ برابر</strong> و حجم <strong>۲۵ برابر</strong> عضله اسکلتی</li>
+                                <li>حاوی <strong>موکوپلی‌ساکارید</strong> با بار منفی ← ذخیره کلسیم</li>
+                                <li><strong>گیرنده DHP:</strong> حس‌کننده ولتاژ در توبول T</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3><i class="fas fa-solid fa-fire"></i> نقش کلسیم</h3>
+                            <ul>
+                                <li><strong>Ca²⁺ خارج سلولی:</strong> منبع اصلی (برخلاف عضله اسکلتی)</li>
+                                <li><strong>گیرنده رایانودین (RyR):</strong> با ورود Ca²⁺ فعال می‌شود ← آزادسازی Ca²⁺ از شبکه سارکوپلاسمی</li>
+                                <li><strong>انتشار کلسیم-القا-کلسیم (CICR)</strong></li>
+                            </ul>
+                            <div class="box-red" style="margin-top:6px; font-size:0.9rem;">
+                                <i class="fas fa-exclamation-triangle"></i> بدون کلسیم خارج سلولی، قدرت انقباض قلب به شدت کاهش می‌یابد.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="highlight" style="background:#eaf3fa;">
+                        <i class="fas fa-solid fa-arrow-right-arrow-left"></i>
+                        <strong>خلاصه:</strong> پتانسیل عمل ← ورود Ca²⁺ از توبول T ← فعال‌سازی RyR ← آزادسازی Ca²⁺ از SR ← انقباض
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-arrows-rotate"></i> چرخه قلبی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;">مراحل پرشدن بطن‌ها (دیاستول)</h3>
+                            <ul>
+                                <li><strong>پرشدن سریع:</strong> یک‌سوم اول دیاستول (باز شدن دریچه‌های AV)</li>
+                                <li><strong>دیاستاز:</strong> یک‌سوم میانی دیاستول (پر شدن آهسته)</li>
+                                <li><strong>سیستول دهلیزی:</strong> یک‌سوم پایانی دیاستول (۲۰٪ خون بطن‌ها)</li>
+                            </ul>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;">مراحل تخلیه بطن‌ها (سیستول)</h3>
+                            <ul>
+                                <li><strong>انقباض ایزوولومیک:</strong> فشار بالا می‌رود، دریچه‌ها بسته (۰/۰۲-۰/۰۳ ثانیه)</li>
+                                <li><strong>تخلیه سریع:</strong> یک‌سوم اول سیستول (۷۰٪ خون تخلیه می‌شود)</li>
+                                <li><strong>تخلیه آهسته:</strong> دو‌سوم باقی‌مانده سیستول</li>
+                                <li><strong>شل‌شدن ایزوولومیک:</strong> فشار افت می‌کند، دریچه‌ها بسته (۰/۰۳-۰/۰۶ ثانیه)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <h3><i class="fas fa-solid fa-cubes"></i> حجم‌های قلبی</h3>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>مفهوم</th><th>مقدار طبیعی</th><th>توضیح</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>حجم پایان دیاستولی (EDV)</strong></td><td>۱۱۰-۱۲۰ میلی‌لیتر</td><td>حجم بطن پس از پرشدن</td></tr>
+                                <tr><td><strong>حجم ضربه‌ای (SV)</strong></td><td>۷۰ میلی‌لیتر</td><td>خون خارج‌شده در هر ضربان</td></tr>
+                                <tr><td><strong>حجم پایان سیستولی (ESV)</strong></td><td>۴۰-۵۰ میلی‌لیتر</td><td>خون باقی‌مانده در بطن</td></tr>
+                                <tr><td><strong>کسر تخلیه (EF)</strong></td><td>~۶۰٪</td><td>SV ÷ EDV</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-sliders-h"></i> تنظیم عملکرد پمپی قلب</h2>
+                    <h3><i class="fas fa-solid fa-arrows-up-down"></i> مکانیسم فرانک-استارلینگ</h3>
+                    <div class="box-blue">
+                        <p>هرچه خون بیشتری وارد قلب شود، دیواره قلب بیشتر کشیده می‌شود و انقباض قوی‌تری رخ می‌دهد.</p>
+                        <ul>
+                            <li>علت: افزایش کشش ← هم‌پوشانی بهینه اکتین-میوزین</li>
+                            <li>قلب تمام خون بازگشتی از وریدها را پمپ می‌کند.</li>
+                        </ul>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-thermometer-half"></i>
+                        <strong>اثر دما:</strong> افزایش دما ← ↑ ضربان قلب (افزایش نفوذپذیری غشاء). کاهش دما ← ↓ ضربان قلب.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-bolt"></i> سیستم هدایت الکتریکی قلب</h2>
+                    <div class="grid-2">
+                        <div>
+                            <h3><i class="fas fa-solid fa-clock"></i> ضربان‌سازها</h3>
+                            <ul>
+                                <li><strong>گره سینوسی (SA):</strong> ۷۰-۸۰ بار/دقیقه (ضربان‌ساز اصلی)</li>
+                                <li><strong>گره AV:</strong> ۴۰-۶۰ بار/دقیقه</li>
+                                <li><strong>فیبرهای پورکنژ:</strong> ۱۵-۴۰ بار/دقیقه</li>
+                            </ul>
+                            <div class="box-gold" style="margin-top:6px; font-size:0.9rem;">
+                                <i class="fas fa-gem"></i> چرا SA اصلی است؟ چون سریع‌تر از دیگران تخلیه می‌شود و آنها را قبل از تخلیه خودشان تحریک می‌کند.
+                            </div>
+                        </div>
+                        <div>
+                            <h3><i class="fas fa-solid fa-route"></i> مسیر هدایت</h3>
+                            <ul>
+                                <li><strong>SA Node</strong> ← مسیرهای بین‌گرهی (قدامی، میانی، خلفی)</li>
+                                <li><strong>AV Node</strong> ← تأخیر ~۰/۱۳ ثانیه</li>
+                                <li><strong>دسته هیس</strong> ← فیبرهای پورکنژ</li>
+                                <li><strong>هدایت یک‌طرفه</strong> در دسته AV (از برگشت به دهلیز جلوگیری می‌کند)</li>
+                            </ul>
+                            <div style="background:#fdeeea; border-radius:14px; padding:8px 14px; margin-top:6px; font-size:0.9rem;">
+                                <i class="fas fa-clock"></i> زمان کل: ~۰/۱۶ ثانیه از SA تا انتهای پورکنژ
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-heartbeat"></i> آریتمی‌های قلبی</h2>
+                    <div class="grid-2">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-forward"></i> تاکی‌کاردی</h3>
+                            <p>ضربان > ۱۰۰/دقیقه. علل: تب، تحریک سمپاتیک، خون‌ریزی، شوک.</p>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-backward"></i> برادی‌کاردی</h3>
+                            <p>ضربان < ۶۰/دقیقه. علل: تحریک واگ، سن، ورزشکاران.</p>
+                        </div>
+                    </div>
+                    <h3><i class="fas fa-solid fa-ban"></i> بلوک‌های قلبی</h3>
+                    <div class="grid-2">
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">درجه ۱</h4><p>فاصله PR > ۰/۲ ثانیه (تأخیر هدایت)</p></div>
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">درجه ۲</h4><p>برخی ضربان‌ها به بطن نمی‌رسند (QRS حذف می‌شود)</p></div>
+                        <div class="box-red"><h4 style="font-weight:700; color:#0a3147;">درجه ۳ (کامل)</h4><p>هیچ ضربانی به بطن نمی‌رسد. بطن با ریتم خود (~۳۰-۴۰/دقیقه) می‌زند.</p></div>
+                    </div>
+                    <h3><i class="fas fa-solid fa-fire"></i> فیبریلاسیون بطنی</h3>
+                    <div class="box-red">
+                        <p><strong>خطرناک‌ترین آریتمی!</strong> اگر در عرض ۱-۳ دقیقه درمان نشود، کشنده است.</p>
+                        <ul>
+                            <li>علل: شوک الکتریکی، ایسکمی قلب</li>
+                            <li>ECG: امواج نامنظم بدون ریتم</li>
+                            <li>درمان: <strong>دفیبریلاسیون</strong> (شوک الکتریکی)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-baby"></i> بیماری‌های مادرزادی قلب</h2>
+                    <h3><i class="fas fa-solid fa-arrow-left-right"></i> مجرای شریانی باز (PDA)</h3>
+                    <div class="grid-2">
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">مکانیسم</h4><ul><li>مجرای جنینی بسته نمی‌شود.</li><li>خون از آئورت (فشار بالا) به شریان ریوی (فشار پایین) می‌رود.</li><li><strong>شنت چپ به راست</strong></li></ul></div>
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">نشانه‌ها</h4><ul><li><strong>سوفل ماشینی</strong> (مشخصه)</li><li>افزایش برون‌ده قلبی</li><li>احتقان ریوی ← ادم</li></ul></div>
+                    </div>
+                    <h3><i class="fas fa-solid fa-shield-halved"></i> تترالوژی فالوت</h3>
+                    <div class="box-red">
+                        <p><strong>شنت راست به چپ</strong> ← سیانوز (کبودی)</p>
+                        <ul>
+                            <li>آئورت از بطن راست (یا هر دو) خارج می‌شود.</li>
+                            <li><strong>تنگی شریان ریوی</strong> ← خون به جای ریه به آئورت می‌رود.</li>
+                            <li>سوراخ بین‌بطنی (VSD) ← خون از راست به چپ.</li>
+                            <li>هیپرتروفی بطن راست.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>سینسیتیوم:</strong> اتصالات شکاف‌دار ← انقباض یکپارچه</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پتانسیل عمل:</strong> فاز ۲ (کفه) ← Ca²⁺</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>CICR:</strong> Ca²⁺ خارج سلولی ← آزادسازی Ca²⁺ از SR</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>چرخه قلبی:</strong> ۴ مرحله اصلی</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>حجم‌ها:</strong> EDV=۱۲۰, SV=۷۰, ESV=۵۰, EF=~۶۰٪</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فرانک-استارلینگ:</strong> ↑ حجم ← ↑ نیروی انقباض</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>هدایت:</strong> SA → AV (~۰/۱۳s تأخیر) → هیس → پورکنژ</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فیبریلاسیون بطنی:</strong> نیاز به دفیبریلاسیون</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>PDA:</strong> سوفل ماشینی ← شنت چپ به راست</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فالوت:</strong> سیانوز ← شنت راست به چپ</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل آناتومی قلب، پتانسیل عمل قلبی، مزدوج‌شدن تحریک-انقباض، چرخه قلبی، مکانیسم فرانک-استارلینگ، سیستم هدایت، آریتمی‌ها و بیماری‌های مادرزادی می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۴ =====
+        {
+            id: 4,
+            title: 'سیستم گردش خون',
+            icon: 'fa-solid fa-heart',
+            color: '#c44545',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-calculator"></i> دینامیک گردش خون</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-scale-balanced"></i> قانون اهم</h3>
+                            <div class="formula-box" style="font-size:1.1rem;">F = ΔP ÷ R</div>
+                            <ul><li><strong>F:</strong> جریان خون</li><li><strong>ΔP:</strong> اختلاف فشار</li><li><strong>R:</strong> مقاومت (واحد: PRU)</li></ul>
+                            <p style="font-size:0.9rem; color:#3a5e7a;">مقاومت کل سیستمیک ≈ ۱ PRU</p>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-circle"></i> قانون پوآزویل</h3>
+                            <div class="formula-box" style="font-size:1rem;">F = (π × ΔP × r⁴) ÷ (8 × η × l)</div>
+                            <ul><li><strong>r:</strong> شعاع رگ (توان ۴!)</li><li><strong>η:</strong> ویسکوزیته خون</li><li><strong>l:</strong> طول رگ</li></ul>
+                            <div class="box-gold" style="margin-top:6px; font-size:0.9rem;"><i class="fas fa-gem"></i> افزایش ۲ برابری قطر ← ۱۶ برابر شدن جریان!</div>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> قانون لاپلاس</h3>
+                            <div class="formula-box" style="font-size:1.1rem;">T = r × P</div>
+                            <ul><li><strong>T:</strong> تانسیون دیواره رگ</li><li><strong>r:</strong> شعاع رگ</li><li><strong>P:</strong> فشار داخل رگ</li></ul>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-water"></i> عدد رینولدز (جریان آشفته)</h3>
+                            <div class="formula-box" style="font-size:1rem;">Re = (v × d × ρ) ÷ η</div>
+                            <ul><li><strong>v:</strong> سرعت جریان</li><li><strong>d:</strong> قطر رگ</li><li><strong>ρ:</strong> چگالی خون</li><li><strong>η:</strong> ویسکوزیته</li></ul>
+                            <p style="font-size:0.9rem; color:#3a5e7a;">Re > ۲۰۰۰ ← جریان آشفته</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-wave-square"></i> فشار نبض شریانی</h2>
+                    <div class="grid-2">
+                        <div><h3><i class="fas fa-solid fa-arrow-up"></i> مقادیر طبیعی</h3><ul><li><strong>فشار سیستولی:</strong> ۱۲۰ mmHg</li><li><strong>فشار دیاستولی:</strong> ۸۰ mmHg</li><li><strong>فشار نبض:</strong> ۱۲۰ - ۸۰ = <span class="key-number">۴۰</span> mmHg</li><li><strong>فشار متوسط:</strong> ~۱۰۰ mmHg</li></ul></div>
+                        <div><h3><i class="fas fa-solid fa-sliders-h"></i> عوامل مؤثر بر فشار نبض</h3><ul><li><strong>↑ برون‌ده حجم ضربه‌ای:</strong> ↑ فشار نبض</li><li><strong>↓ حجم‌پذیری شریانی:</strong> ↑ فشار نبض (مثل کهولت سن)</li></ul><div class="box-red" style="margin-top:6px; font-size:0.9rem;"><i class="fas fa-exclamation-triangle"></i> در تنگی آئورت، فشار نبض <strong>کاهش</strong> می‌یابد.</div></div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-sliders-h"></i> کنترل موضعی جریان خون</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-fire"></i> تئوری متابولیک</h3><ul><li>↑ فعالیت بافت ← ↑ مصرف O₂ ← ↓ O₂</li><li>↑ تولید <strong>آدنوزین</strong>، CO₂، H⁺، K⁺</li><li>← گشاد شدن عروق ← ↑ جریان خون</li></ul><p style="font-size:0.9rem; color:#3a5e7a;">آدنوزین مهم‌ترین عامل در عروق کرونر است.</p></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-dumbbell"></i> تئوری میوژنیک</h3><ul><li>↑ فشار ← کشش دیواره رگ</li><li>باز شدن کانال‌های یونی حساس به کشش</li><li>ورود Na⁺ ← دپلاریزاسیون ← ورود Ca²⁺ ← انقباض</li><li>← ↓ قطر رگ ← ↓ جریان خون</li></ul></div>
+                    </div>
+                    <div class="highlight" style="background:#eaf3fa;"><i class="fas fa-solid fa-arrows-rotate"></i> <strong>خودتنظیمی (Autoregulation):</strong> با تغییر فشار شریانی (۷۵-۱۶۰ mmHg)، جریان خون تقریباً ثابت می‌ماند (ترکیب تئوری متابولیک و میوژنیک).</div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-reflex"></i> رفلکس‌های تنظیم فشار خون</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-gauge-high"></i> بارورسپتورها</h3><ul><li><strong>مکان:</strong> سینوس کاروتید، قوس آئورت</li><li><strong>محرک:</strong> کشش دیواره ← ↑ فشار</li><li><strong>پاسخ:</strong> ↓ ضربان قلب، ↓ انقباض، گشادی عروق ← ↓ فشار</li><li><strong>نقش:</strong> تنظیم <strong>سریع</strong> فشار (دستگاه بافر)</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-vial"></i> کمورسپتورها</h3><ul><li><strong>مکان:</strong> اجسام کاروتید و آئورت</li><li><strong>محرک:</strong> ↓ O₂، ↑ CO₂، ↓ pH</li><li><strong>پاسخ:</strong> ↑ فشار خون (فعال در فشار < ۸۰ mmHg)</li></ul></div>
+                    </div>
+                    <div class="box-gold"><i class="fas fa-gem"></i> <strong>نکته کلیدی:</strong> بارورسپتورها تنظیم <strong>سریع</strong> فشار را بر عهده دارند اما در تنظیم طولانی‌مدت <strong>سازگار</strong> می‌شوند.</div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-kidney"></i> سیستم رنین-آنژیوتانسین-آلدوسترون (RAAS)</h2>
+                    <div class="grid-2">
+                        <div><h3><i class="fas fa-solid fa-arrow-down"></i> محرک‌ها</h3><ul><li>↓ فشار خون</li><li>↓ حجم خون</li><li>↓ Na⁺ در ماکولا دنسا</li></ul></div>
+                        <div><h3><i class="fas fa-solid fa-arrow-right"></i> مراحل</h3><ul><li>کلیه ← <strong>رنین</strong> ← آنژیوتانسینوژن ← <strong>آنژیوتانسین I</strong></li><li>ACE (ریه) ← <strong>آنژیوتانسین II</strong></li><li>آنژیوتانسین II ← ↑ فشار خون (انقباض عروق، ↑ آلدوسترون)</li></ul></div>
+                    </div>
+                    <div class="box-red"><i class="fas fa-exclamation-triangle"></i> <strong>نکته مهم:</strong> آنژیوتانسین II <strong>قدرتمندترین</strong> ماده منقبض‌کننده عروق در بدن است. اثر آن در عرض ۱-۲ دقیقه.</div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-droplet"></i> میکروسیرکولاسیون و سیستم لنفاوی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">نیروهای استارلینگ</h4><ul><li><strong>Pc:</strong> فشار هیدروستاتیک مویرگی (خارج‌کننده)</li><li><strong>Pif:</strong> فشار هیدروستاتیک مایع میان‌بافتی (داخل‌کننده)</li><li><strong>πp:</strong> فشار اسمزی کلوئیدی پلاسما (داخل‌کننده)</li><li><strong>πif:</strong> فشار اسمزی کلوئیدی مایع میان‌بافتی (خارج‌کننده)</li></ul></div>
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">NFP (فشار خالص تصفیه)</h4><div class="formula-box" style="font-size:0.95rem;">NFP = (Pc - Pif) - (πp - πif)</div><ul><li><strong>انتهای شریانی:</strong> NFP مثبت ← خروج مایع</li><li><strong>انتهای وریدی:</strong> NFP منفی ← ورود مایع (بازجذب)</li></ul><p style="font-size:0.9rem; color:#3a5e7a;">فیلتراسیون خالص ≈ ۲ ml/min</p></div>
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>قانون اهم:</strong> F = ΔP/R</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پوآزویل:</strong> F ∝ r⁴</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>لاپلاس:</strong> T = r × P</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فشار نبض:</strong> ۴۰ mmHg</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>نیروهای استارلینگ:</strong> تعیین کننده تبادل مایع</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>خودتنظیمی:</strong> ترکیب متابولیک + میوژنیک</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>RAAS:</strong> رنین ← آنژیوتانسین I ← ACE ← آنژیوتانسین II</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>بارورسپتورها:</strong> تنظیم سریع فشار</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل دینامیک گردش خون، فشار نبض، کنترل موضعی، رفلکس‌ها، RAAS، میکروسیرکولاسیون و لنف می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۵ =====
+        {
+            id: 5,
+            title: 'کلیه‌ها و مایعات بدن',
+            icon: 'fa-solid fa-kidney',
+            color: '#2a7a3a',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-droplet"></i> مایعات بدن</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-water"></i> کل آب بدن (TBW)</h3><ul><li><strong>۶۰٪</strong> وزن بدن ≈ <strong>۴۲ لیتر</strong> (در فرد ۷۰ کیلوگرمی)</li><li>در زنان: ~۵۰٪ وزن بدن</li><li>در نوزادان: ~۷۰-۷۵٪</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrows-split-up-and-left"></i> تقسیم‌بندی</h3><ul><li><strong>ICF:</strong> ۴۰٪ وزن (۲۸ لیتر) – دو سوم</li><li><strong>ECF:</strong> ۲۰٪ وزن (۱۴ لیتر) – یک سوم</li><li style="font-size:0.9rem; color:#3a5e7a;">ECF = پلاسما (۱/۴) + مایع میان‌بافتی (۳/۴)</li></ul></div>
+                    </div>
+                    <div class="box-gold"><i class="fas fa-gem"></i> <strong>نکته کلیدی:</strong> «سدیم بیرونه، پتاسیم درونه!» – این اصل برای پتانسیل غشاء حیاتی است.</div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-filter"></i> فیلتراسیون گلومرولی (GFR)</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> مقادیر طبیعی</h3><ul><li><strong>GFR = ۱۲۵ ml/min = ۱۸۰ L/day</strong></li><li>فیلترات ≈ پلاسما بدون پروتئین</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-sliders-h"></i> عوامل مؤثر</h3><ul><li>↑ فشار هیدروستاتیک گلومرولی ← ↑ GFR</li><li>↑ فشار اسمزی کلوئیدی پلاسما ← ↓ GFR</li><li>↑ فشار کپسول بومن ← ↓ GFR</li></ul></div>
+                    </div>
+                    <div class="box-gold"><i class="fas fa-gem"></i> <strong>نکته کلیدی:</strong> با تغییر فشار شریانی (۷۵-۱۶۰ mmHg)، GFR تقریباً ثابت می‌ماند (خودتنظیمی).</div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-sliders-h"></i> تنظیم هورمونی بازجذب</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-gem"></i> آلدوسترون</h3><ul><li>از قشر فوق کلیه</li><li>↑ بازجذب <strong>Na⁺</strong> و ↑ ترشح <strong>K⁺</strong> و H⁺</li><li>تحریک: ↑K⁺، ↑ آنژیوتانسین II</li></ul></div>
+                        <div class="box-red"><h3 style="margin-top:0;"><i class="fas fa-solid fa-gem"></i> ADH (هورمون ضدادراری)</h3><ul><li>از هیپوفیز خلفی</li><li>↑ نفوذپذیری به آب در توبول دیستال و مجرای جمع‌کننده</li><li>تحریک: ↑ اسموالریته، ↓ حجم خون</li><li>مکانیسم: <strong>AQP-2</strong> (کانال آب)</li></ul></div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-calculator"></i> کلیرانس کلیوی</h2>
+                    <div class="formula-box">C<sub>s</sub> = (U<sub>s</sub> × V) ÷ P<sub>s</sub></div>
+                    <div class="grid-2" style="margin-top:12px;">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-filter"></i> کلیرانس اینولین = GFR</h3><p>اینولین آزادانه فیلتره می‌شود و نه بازجذب و نه ترشح می‌شود.</p><p style="font-size:0.9rem; color:#3a5e7a;">C<sub>inulin</sub> = GFR = ۱۲۵ ml/min</p></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-vial"></i> کلیرانس PAH = RPF</h3><p>PAH ~۹۰٪ از پلاسما پاک می‌شود (ترشح می‌شود).</p><p style="font-size:0.9rem; color:#3a5e7a;">RPF = C<sub>PAH</sub> ÷ ۰/۹</p></div>
+                    </div>
+                    <div class="box-gold"><i class="fas fa-gem"></i> <strong>کسر فیلتراسیون (FF):</strong> FF = GFR ÷ RPF ≈ ۱۲۵ ÷ ۶۵۰ ≈ <strong>۱۹٪</strong></div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-arrows-spin"></i> تغلیظ و رقیق‌سازی ادرار</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-droplet"></i> ادرار رقیق (بدون ADH)</h3><ul><li>اسموالریته: ~۵۰ mOsm/L</li><li>حجم: تا ۲۰ L/day</li></ul></div>
+                        <div class="box-red"><h3 style="margin-top:0;"><i class="fas fa-solid fa-droplet"></i> ادرار غلیظ (با ADH)</h3><ul><li>اسموالریته: تا <strong>۱۲۰۰-۱۴۰۰ mOsm/L</strong></li><li>حجم اجباری: ~۰/۵ L/day</li></ul></div>
+                    </div>
+                    <div class="box-red"><i class="fas fa-exclamation-triangle"></i> <strong>حجم اجباری ادرار:</strong> ۶۰۰ mOsm/day ÷ ۱۲۰۰ mOsm/L = <strong>۰/۵ L/day</strong><span style="display:block; font-size:0.9rem;">برای دفع مواد زائد، حتی در کم‌آبی هم باید حداقل ۰/۵ لیتر ادرار دفع شود.</span></div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-vial"></i> تنظیم اسید-باز</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">سیستم‌های بافری</h4><ul><li><strong>بی‌کربنات (HCO₃⁻):</strong> مهم‌ترین بافر خارج سلولی</li><li><strong>فسفات (HPO₄²⁻/H₂PO₄⁻):</strong> مهم در داخل سلول و توبول کلیه</li><li><strong>پروتئین‌ها (هموگلوبین):</strong> مهم‌ترین بافر داخل سلولی</li></ul></div>
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">معادله هندرسون-هاسلبالخ</h4><div class="formula-box" style="font-size:0.95rem;">pH = ۶/۱ + log (HCO₃⁻ / ۰/۰۳ × PCO₂)</div><ul><li>↑ HCO₃⁻ ← ↑ pH (آلکالوز)</li><li>↑ PCO₂ ← ↓ pH (اسیدوز)</li></ul></div>
+                    </div>
+                    <div class="table-wrap" style="margin-top:12px;">
+                        <table>
+                            <thead><tr><th>اختلال</th><th>pH</th><th>HCO₃⁻</th><th>PCO₂</th><th>علت</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>اسیدوز تنفسی</strong></td><td>↓</td><td>↑ (جبران)</td><td>↑↑</td><td>↓ تهویه (CO₂)</td></tr>
+                                <tr><td><strong>آلکالوز تنفسی</strong></td><td>↑</td><td>↓ (جبران)</td><td>↓↓</td><td>↑ تهویه (CO₂)</td></tr>
+                                <tr><td><strong>اسیدوز متابولیک</strong></td><td>↓</td><td>↓↓</td><td>↓ (جبران)</td><td>↓ HCO₃⁻</td></tr>
+                                <tr><td><strong>آلکالوز متابولیک</strong></td><td>↑</td><td>↑↑</td><td>↑ (جبران)</td><td>↑ HCO₃⁻</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>TBW:</strong> ۶۰٪ وزن (۴۲ L)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ECF/ICF:</strong> ۲۰٪ / ۴۰٪ وزن</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>GFR:</strong> ۱۲۵ ml/min = ۱۸۰ L/day</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>کلیرانس:</strong> C<sub>s</sub> = (U<sub>s</sub> × V) / P<sub>s</sub></div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>FF:</strong> GFR ÷ RPF ≈ ۱۹٪</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>آلدوسترون:</strong> ↑ Na⁺ بازجذب، ↑ K⁺ ترشح</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ADH:</strong> ↑ نفوذپذیری به آب (AQP-2)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>تغلیظ ادرار:</strong> جریان معکوس + ADH</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>اسیدوز متابولیک:</strong> ↓ pH، ↓ HCO₃⁻</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>حجم اجباری:</strong> ۰/۵ L/day</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل مایعات بدن، GFR، تنظیم هورمونی، کلیرانس، تغلیظ ادرار و اسید-باز می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۶ =====
+        {
+            id: 6,
+            title: 'سلول‌های خونی، ایمنی و انعقاد خون',
+            icon: 'fa-solid fa-droplet',
+            color: '#c44545',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-circle"></i> گلبول‌های قرمز (اریتروسیت‌ها)</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-table"></i> مقادیر طبیعی</h3>
+                            <ul>
+                                <li><strong>تعداد:</strong> مردان ۵/۲M، زنان ۴/۷M در هر mm³</li>
+                                <li><strong>هموگلوبین:</strong> مردان ۱۵ g/dL، زنان ۱۴ g/dL</li>
+                                <li><strong>شکل:</strong> قرص مقعرالطرفین (نازک‌ترین در مرکز)</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> تولید</h3>
+                            <ul>
+                                <li>منشأ: <strong>سلول بنیادین چندظرفیتی</strong> در مغز استخوان</li>
+                                <li>مراحل: اریتروبلاست ← رتیکولوسیت ← گلبول قرمز بالغ</li>
+                                <li><strong>اریتروپویتین (EPO):</strong> از کلیه، تحریک تولید RBC</li>
+                                <li>نقش: ↓ اکسیژن ← ↑ EPO ← ↑ تولید RBC</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> در کم‌خونی داسی‌شکل، در زنجیره بتا، <strong>والین</strong> جایگزین <strong>گلوتامیک اسید</strong> می‌شود ← شکل داسی ← شکنندگی غشاء.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-shield"></i> گلبول‌های سفید (لکوسیت‌ها)</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-list"></i> انواع و مقادیر</h3>
+                            <ul>
+                                <li><strong>نوتروفیل:</strong> ۶۲٪ (فاگوسیتوز)</li>
+                                <li><strong>لنفوسیت:</strong> ۳۰٪ (ایمنی اکتسابی)</li>
+                                <li><strong>مونوسیت:</strong> ۵/۳٪ ← ماکروفاژ</li>
+                                <li><strong>ائوزینوفیل:</strong> ۲/۳٪ (انگل‌ها)</li>
+                                <li><strong>بازوفیل:</strong> ۰/۴٪ (آلرژی، هیستامین)</li>
+                                <li><strong>تعداد کل:</strong> ۷۰۰۰ در هر mm³</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> تولید و ویژگی‌ها</h3>
+                            <ul>
+                                <li><strong>میلوئید:</strong> نوتروفیل، ائوزینوفیل، بازوفیل، مونوسیت (مغز استخوان)</li>
+                                <li><strong>لنفوئید:</strong> لنفوسیت‌ها (بافت‌های لنفاوی)</li>
+                                <li><strong>دیاپدز:</strong> عبور از مویرگ‌ها</li>
+                                <li><strong>کموتاکسی:</strong> جذب به سمت مواد شیمیایی</li>
+                                <li><strong>فاگوسیتوز:</strong> بلع و هضم عوامل مهاجم</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> <strong>سیستم رتیکولواندوتلیال</strong> = مونوسیت‌ها + ماکروفاژهای بافتی + سلول‌های اندوتلیال خاص (کبد، طحال، مغز استخوان).
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-shield"></i> ایمنی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-lock"></i> ایمنی ذاتی</h3>
+                            <ul>
+                                <li>فاگوسیتوز</li>
+                                <li>مقاومت پوست</li>
+                                <li>مواد شیمیایی (لیزوزیم)</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-vial"></i> ایمنی اکتسابی</h3>
+                            <ul>
+                                <li><strong>هومورال (B):</strong> تولید آنتی‌بادی</li>
+                                <li><strong>سلولی (T):</strong> T کمکی (CD4)، T سیتوتوکسیک (CD8)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>ایدز (HIV):</strong> حمله به <strong>CD4 (T کمکی)</strong> ← فلج ایمنی.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-hand-holding-droplet"></i> هموستاز و انعقاد خون</h2>
+                    <h3><i class="fas fa-solid fa-table"></i> فاکتورهای انعقادی</h3>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>فاکتور</th><th>نام</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>I</strong></td><td>فیبرینوژن</td></tr>
+                                <tr><td><strong>II</strong></td><td>پروترومبین</td></tr>
+                                <tr><td><strong>III</strong></td><td>ترومبوپلاستین بافتی</td></tr>
+                                <tr><td><strong>IV</strong></td><td>کلسیم (Ca²⁺)</td></tr>
+                                <tr><td><strong>V</strong></td><td>پرواکسلرین</td></tr>
+                                <tr><td><strong>VII</strong></td><td>پروکانورتین</td></tr>
+                                <tr><td><strong>VIII</strong></td><td>فاکتور آنتی‌هموفیلیک A</td></tr>
+                                <tr><td><strong>IX</strong></td><td>فاکتور کریسمس (هموفیلی B)</td></tr>
+                                <tr><td><strong>X</strong></td><td>فاکتور استوارت</td></tr>
+                                <tr><td><strong>XI</strong></td><td>پیش‌ساز ترومبوپلاستین پلاسما</td></tr>
+                                <tr><td><strong>XII</strong></td><td>فاکتور هاگمن</td></tr>
+                                <tr><td><strong>XIII</strong></td><td>فاکتور تثبیت‌کننده فیبرین</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>هموفیلی A:</strong> نقص <strong>فاکتور VIII</strong> (شایع‌ترین)<br>
+                        <strong>هموفیلی B:</strong> نقص <strong>فاکتور IX</strong>
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>RBC:</strong> ۵/۲M (مرد)، ۴/۷M (زن)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>Hb:</strong> ۱۵ g/dL (مرد)، ۱۴ g/dL (زن)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>EPO:</strong> از کلیه، تحریک تولید RBC</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>هموگلوبین A:</strong> α₂β₂</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>WBC:</strong> ۷۰۰۰/mm³، نوتروفیل (۶۲٪)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ایدز:</strong> HIV ← حمله به CD4</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>هموستاز:</strong> ۴ مرحله</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>هموفیلی A:</strong> نقص فاکتور VIII</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>کمبود ویتامین K:</strong> ↓ فاکتورهای II, VII, IX, X</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فیبرینولیز:</strong> پلاسمین ← حل شدن لخته</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل گلبول‌های قرمز (RBC، هموگلوبین، EPO)، گلبول‌های سفید (انواع، فاگوسیتوز)، ایمنی (ذاتی، اکتسابی، B، T، کمپلمان)، هموستاز (۴ مرحله) و انعقاد (فاکتورها، مسیرها، هموفیلی) می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۷ =====
+        {
+            id: 7,
+            title: 'تنفس',
+            icon: 'fa-solid fa-lungs',
+            color: '#1a5e7a',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-lungs"></i> مکانیک تنفس</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> عضلات دمی</h3>
+                            <ul>
+                                <li><strong>دیافراگم</strong> (اصلی)</li>
+                                <li>بین دنده‌ای خارجی</li>
+                                <li>استرنوکلیدوماستوئید</li>
+                                <li>اسکالن (نردبانی)</li>
+                                <li>سراتوس قدامی</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-down"></i> عضلات بازدمی</h3>
+                            <ul>
+                                <li>بین دنده‌ای داخلی</li>
+                                <li><strong>راست شکمی</strong> (دنده‌های تحتانی)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> <strong>سورفکتانت</strong> توسط سلول‌های پنوموسیت نوع II ساخته می‌شود. کمبود آن ← سندرم دیسترس تنفسی نوزادان (RDS).
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-chart-bar"></i> تهویه ریوی</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>حجم</th><th>مقدار طبیعی</th><th>توضیح</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>VT</strong> (حجم جاری)</td><td>۵۰۰ ml</td><td>حجم هر تنفس طبیعی</td></tr>
+                                <tr><td><strong>IRV</strong> (ذخیره دمی)</td><td>۳۰۰۰ ml</td><td>بیشترین دم پس از VT</td></tr>
+                                <tr><td><strong>ERV</strong> (ذخیره بازدمی)</td><td>۱۱۰۰ ml</td><td>بیشترین بازدم پس از VT</td></tr>
+                                <tr><td><strong>RV</strong> (حجم باقیمانده)</td><td>۱۲۰۰ ml</td><td>هوای باقی‌مانده پس از بازدم حداکثر</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>تهویه دقیقه‌ای:</strong> VT × RR ≈ ۵۰۰ × ۱۲ = <strong>۶۰۰۰ ml/min</strong><br>
+                        <strong>تهویه آلوئولی:</strong> (VT - فضای مرده) × RR ≈ (۵۰۰ - ۱۵۰) × ۱۲ = <strong>۴۲۰۰ ml/min</strong>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-vial"></i> حمل اکسیژن و دی‌اکسیدکربن</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-right"></i> اثر بوهر</h3>
+                            <ul>
+                                <li>↑ CO₂، ↑ H⁺، ↑ دما، ↑ 2,3-BPG</li>
+                                <li><strong>جابجایی منحنی به راست</strong></li>
+                                <li>← ↓ تمایل هموگلوبین به O₂ ← ↑ آزادسازی O₂ در بافت‌ها</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-left"></i> اثر هالدان</h3>
+                            <ul>
+                                <li>↑ O₂ ← <strong>جابجایی منحنی به چپ</strong></li>
+                                <li>← ↑ جذب CO₂ توسط خون در ریه‌ها</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        اشباع O₂: شریانی ~<strong>۹۷٪</strong>، وریدی ~<strong>۷۵٪</strong><br>
+                        ظرفیت O₂ خون: ~<strong>۲۰ ml O₂/dL</strong> (۱۵ g Hb × ۱/۳۴ ml O₂/g)
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-brain"></i> کنترل تنفس</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h4 style="font-weight:700; color:#0a3147;">مرکز تنفس</h4>
+                            <ul>
+                                <li><strong>گروه تنفسی پشتی:</strong> دم (ریتم پایه)</li>
+                                <li><strong>گروه تنفسی شکمی:</strong> تنفس عمیق</li>
+                                <li><strong>مرکز پنوموتاکسیک:</strong> قطع دم</li>
+                                <li><strong>مرکز آپنوستیک:</strong> طولانی کردن دم</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h4 style="font-weight:700; color:#0a3147;">گیرنده‌های شیمیایی</h4>
+                            <ul>
+                                <li><strong>مرکزی:</strong> در بصل‌النخاع – حساس به CO₂ و H⁺</li>
+                                <li><strong>محیطی:</strong> اجسام کاروتید و آئورت – حساس به O₂, CO₂, H⁺</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>محرک اصلی تنفس:</strong> <strong>CO₂</strong> (از طریق H⁺ در مایع مغزی-نخاعی)
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>عضلات دمی:</strong> دیافراگم، بین دنده‌ای خارجی</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>سورفکتانت:</strong> کاهش کشش سطحی (پنوموسیت II)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>VT:</strong> ۵۰۰ ml، <strong>VC:</strong> ۴۶۰۰ ml</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>تهویه دقیقه‌ای:</strong> ۶ L/min</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>V/Q:</strong> ۰/۸ (۴ ÷ ۵)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>اشباع O₂:</strong> شریانی ۹۷٪، وریدی ۷۵٪</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>اثر بوهر:</strong> جابجایی به راست ← ↑ آزادسازی O₂</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>حمل CO₂:</strong> HCO₃⁻ (۷۰٪)، کربامینو (۲۳٪)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>محرک اصلی:</strong> CO₂</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل مکانیک تنفس، حجم‌های ریوی، حمل O₂ و CO₂ (اثر بوهر/هالدان) و کنترل تنفس می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۸ =====
+        {
+            id: 8,
+            title: 'فیزیولوژی هوانوردی، فضا و غواصی',
+            icon: 'fa-solid fa-rocket',
+            color: '#b1653b',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-mountain"></i> فیزیولوژی ارتفاع بالا</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-down"></i> کاهش فشار اکسیژن</h3>
+                            <ul>
+                                <li>با افزایش ارتفاع، <strong>فشار بارومتریک</strong> کاهش می‌یابد.</li>
+                                <li>PO₂ آلوئولی کاهش می‌یابد ← <strong>هیپوکسی</strong></li>
+                                <li>در ارتفاع ۱۸۰۰۰ فوت (~۵۵۰۰ متر): نیاز به <strong>اکسیژن مکمل</strong></li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-microscope"></i> سازگاری</h3>
+                            <ul>
+                                <li><strong>↑ تعداد گلبول‌های قرمز</strong> (تحریک EPO از کلیه)</li>
+                                <li><strong>↑ ۲,۳-BPG</strong> ← جابجایی منحنی O₂-Hb به راست</li>
+                                <li>↑ تعداد مویرگ‌ها و میتوکندری</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>بیماری‌های ارتفاع بالا:</strong>
+                        <ul>
+                            <li><strong>ادم ریوی ارتفاع بالا (HAPE)</strong></li>
+                            <li><strong>ادم مغزی ارتفاع بالا (HACE)</strong></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-user-astronaut"></i> فیزیولوژی فضا (بی‌وزنی)</h2>
+                    <ul>
+                        <li><strong>قلبی-عروقی:</strong> کاهش حجم خون (↑ دفع ادرار، ↓ حجم پلاسما)</li>
+                        <li><strong>عضلانی:</strong> <strong>آتروفی عضلات</strong> (به دلیل عدم استفاده)</li>
+                        <li><strong>استخوانی:</strong> ↓ تراکم استخوان (پوکی استخوان)</li>
+                        <li>پس از بازگشت: <strong>عدم تحمل ارتواستاتیک</strong></li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-water"></i> فیزیولوژی غواصی</h2>
+                    <div class="grid-2">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;">بیماری فشار (Caisson Disease)</h3>
+                            <ul>
+                                <li><strong>علت:</strong> صعود سریع ← تشکیل <strong>حباب‌های نیتروژن</strong></li>
+                                <li><strong>علائم:</strong> درد مفاصل، فلج، مرگ</li>
+                                <li><strong>درمان:</strong> <strong>اتاقک فشار (Hyperbaric Oxygen)</strong></li>
+                            </ul>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;">نیتروژن نارکوزیس (مستی عمق)</h3>
+                            <ul>
+                                <li><strong>علت:</strong> اثر مستقیم نیتروژن بر CNS</li>
+                                <li><strong>علائم:</strong> سرخوشی، کاهش هوشیاری</li>
+                                <li><strong>درمان:</strong> صعود به عمق کمتر</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> بیماری فشار ← حباب‌های نیتروژن ← درمان: <strong>اتاقک فشار</strong>
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ارتفاع بالا:</strong> هیپوکسی، ↑ RBC (EPO)، ↑ ۲,۳-BPG</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>HAPE/HACE:</strong> ادم ریوی/مغزی</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>بی‌وزنی:</strong> ↓ حجم خون، آتروفی عضلات</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>بیماری فشار:</strong> حباب‌های نیتروژن ← اتاقک فشار</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>نیتروژن نارکوزیس:</strong> اثر مخدر نیتروژن بر CNS</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل فیزیولوژی ارتفاع بالا، بی‌وزنی و غواصی (بیماری فشار، نیتروژن نارکوزیس) می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۹ =====
+        {
+            id: 9,
+            title: 'اصول کلی دستگاه‌های حسی',
+            icon: 'fa-solid fa-brain',
+            color: '#1a5e7a',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-eye"></i> گیرنده‌های حسی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-list"></i> انواع</h3>
+                            <ul>
+                                <li><strong>مکانیکورسپتور:</strong> لمس، فشار، ارتعاش</li>
+                                <li><strong>ترموکورسپتور:</strong> دما</li>
+                                <li><strong>نوسیسپتور:</strong> درد</li>
+                                <li><strong>الکترومغناطیسی:</strong> نور</li>
+                                <li><strong>شیمی‌کورسپتور:</strong> بو، چشایی</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-wave-square"></i> پتانسیل گیرنده</h3>
+                            <ul>
+                                <li>تغییرات <strong>تدریجی</strong> پتانسیل غشاء</li>
+                                <li>با شدت محرک متناسب است</li>
+                                <li>در صورت رسیدن به آستانه ← پتانسیل عمل</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-sliders-h"></i> تطابق (Adaptation)</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>ویژگی</th><th>سریع‌تطابق‌یابنده (فازیک)</th><th>کند‌تطابق‌یابنده (تونیک)</th></tr></thead>
+                            <tbody>
+                                <tr><td>پاسخ به محرک ثابت</td><td>↓ کاهش</td><td>ثابت</td></tr>
+                                <tr><td>تشخیص</td><td>تغییرات و ارتعاشات</td><td>وضعیت پایدار</td></tr>
+                                <tr><td>مثال</td><td>Pacinian، Meissner</td><td>گیرنده‌های فشار، پروپریوسپتور</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> گیرنده‌های <strong>فازیک</strong> به تغییرات حساس‌اند. گیرنده‌های <strong>تونیک</strong> اطلاع از وضعیت پایدار را می‌دهند.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-bolt"></i> درد و سیستم ضددری</h2>
+                    <div class="grid-2">
+                        <div class="box-red">
+                            <h3 style="margin-top:0;">درد سریع</h3>
+                            <ul>
+                                <li>فیبر: <strong>Aδ</strong> (میلین‌دار)</li>
+                                <li>مسیر: نخاعی-تالاموسی</li>
+                                <li>کیفیت: تیز، قابل تشخیص</li>
+                            </ul>
+                        </div>
+                        <div class="box-red">
+                            <h3 style="margin-top:0;">درد کند</h3>
+                            <ul>
+                                <li>فیبر: <strong>C</strong> (بدون میلین)</li>
+                                <li>مسیر: نخاعی-شبکه‌ای-تالاموسی</li>
+                                <li>کیفیت: مبهم، سوزشی</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-green">
+                        <strong>سیستم ضددری:</strong> <strong>انسفالین</strong>، <strong>اندورفین</strong>، سروتونین، نوراپی‌نفرین
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>برادی‌کینین:</strong> قوی‌ترین ماده دردزا.
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پتانسیل گیرنده:</strong> تدریجی، متناسب با شدت</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فازیک:</strong> سریع‌تطابق‌یابنده</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>تونیک:</strong> کند‌تطابق‌یابنده</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>برادی‌کینین:</strong> قوی‌ترین ماده دردزا</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>سیستم ضددری:</strong> انسفالین، اندورفین</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل گیرنده‌های حسی، تطابق (فازیک/تونیک)، درد (سریع/کند) و سیستم ضددری می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۱۰ =====
+        {
+            id: 10,
+            title: 'حواس ویژه',
+            icon: 'fa-solid fa-eye',
+            color: '#1a5e7a',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-eye"></i> حس بینایی</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>ویژگی</th><th>میله‌ها (Rods)</th><th>مخروط‌ها (Cones)</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>تعداد</strong></td><td>~۱۲۰ میلیون</td><td>~۶-۷ میلیون</td></tr>
+                                <tr><td><strong>نوع دید</strong></td><td>اسکوتوپیک (نور کم)</td><td>فوتوپیک (نور زیاد)</td></tr>
+                                <tr><td><strong>رنگ</strong></td><td>سیاه و سفید</td><td>رنگی (۳ نوع)</td></tr>
+                                <tr><td><strong>حساسیت</strong></td><td>بالا</td><td>پایین</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>رودوپسین = اپسین + رتینال</strong> (ماده حساس به نور در میله‌ها)
+                    </div>
+                    <div class="grid-2">
+                        <div class="box-red"><h4 style="font-weight:700; color:#0a3147;">میوپی (نزدیک‌بینی)</h4><p>عدسی <strong>مقعر</strong></p></div>
+                        <div class="box-red"><h4 style="font-weight:700; color:#0a3147;">هایپروپی (دوربینی)</h4><p>عدسی <strong>محدب</strong></p></div>
+                        <div class="box-red"><h4 style="font-weight:700; color:#0a3147;">آستیگماتیسم</h4><p>عدسی استوانه‌ای</p></div>
+                        <div class="box-red"><h4 style="font-weight:700; color:#0a3147;">پیرچشمی (Presbyopia)</h4><p>عدسی دوکانونی (Bifocal)</p></div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-ear-listen"></i> حس شنوایی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">استخوانچه‌ها</h4><p>چکشی ← سندانی ← رکابی (تقویت ~<strong>۲۲ برابر</strong>)</p></div>
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">حلزون</h4><p>غشای پایه: فرکانس‌های بالا در <strong>قاعده</strong></p></div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-scale-balanced"></i> حس تعادل</h2>
+                    <ul>
+                        <li><strong>کانال‌های نیم‌دایره:</strong> تشخیص <strong>چرخش</strong></li>
+                        <li><strong>اوتریکل و کیسه:</strong> تشخیص <strong>شتاب خطی</strong> و <strong>گرانش</strong> (اتولیت‌ها)</li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-nose"></i> حس بویایی</h2>
+                    <ul>
+                        <li>گیرنده‌های <strong>G-coupled</strong> (~۱۰۰۰ نوع)</li>
+                        <li>مسیر: <strong>بدون تالاموس</strong> ← قشر بویایی</li>
+                        <li>تطابق سریع</li>
+                    </ul>
+                    <h2><i class="fas fa-solid fa-mouth"></i> حس چشایی</h2>
+                    <ul>
+                        <li>۵ طعم: <strong>شیرین، شور، ترش، تلخ، اومامی</strong></li>
+                        <li>~۸۰٪ طعم غذا از <strong>بو</strong> است</li>
+                    </ul>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>میله‌ها:</strong> دید در نور کم، سیاه و سفید</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>مخروط‌ها:</strong> دید در نور زیاد، رنگی</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>میوپی:</strong> عدسی مقعر</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>هایپروپی:</strong> عدسی محدب</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پیرچشمی:</strong> عدسی دوکانونی</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>استخوانچه‌ها:</strong> تقویت ~۲۲ برابر</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>بویایی:</strong> تنها حس بدون تالاموس</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>۵ طعم:</strong> شیرین، شور، ترش، تلخ، اومامی</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل بینایی (میله/مخروط، خطاهای انکساری)، شنوایی (استخوانچه‌ها، حلزون)، تعادل (کانال‌های نیم‌دایره، اوتریکل، کیسه)، بویایی و چشایی (۵ طعم) می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۱۱ =====
+        {
+            id: 11,
+            title: 'نوروفیزیولوژی حرکتی و انسجامی',
+            icon: 'fa-solid fa-brain',
+            color: '#1a5e7a',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-person-walking"></i> سیستم حرکتی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-microscope"></i> قشر حرکتی اولیه (M1)</h3>
+                            <ul>
+                                <li>لوب <strong>پیشانی</strong>، ناحیه <strong>۴ برودمن</strong></li>
+                                <li>شروع <strong>حرکت ارادی</strong></li>
+                                <li>سازمان‌دهی <strong>سوماتوتوپیک</strong> (هومونکولوس)</li>
+                                <li>فیبرهای <strong>کورتیکوسپاینال (راه هرمی)</strong> از اینجا منشأ می‌گیرند</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-route"></i> مسیرهای نزولی حرکتی</h3>
+                            <ul>
+                                <li><strong>راه هرمی (قشری-نخاعی):</strong> حرکت ارادی <strong>دقیق</strong> (دست‌ها و انگشتان)</li>
+                                <li><strong>راه‌های خارج‌هرمی:</strong> تنظیم <strong>تونوس</strong> عضلانی، حفظ <strong>وضعیت</strong>، حرکات <strong>خودکار</strong></li>
+                                <li>راه‌های خارج‌هرمی: روبرو-نخاعی، تگمنتال-نخاعی، دهلیزی-نخاعی، شبکه‌ای-نخاعی</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> <strong>راه هرمی</strong> مسئول حرکات <strong>ارادی و دقیق</strong> است. <strong>راه‌های خارج‌هرمی</strong> مسئول <strong>تونوس، وضعیت و حرکات خودکار</strong> هستند.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-brain"></i> مخچه (Cerebellum)</h2>
+                    <ul>
+                        <li><strong>هماهنگی</strong> حرکات، <strong>تعادل</strong>، <strong>یادگیری حرکتی</strong></li>
+                        <li>اصلاح حرکت در حین اجرا (بر اساس بازخورد حسی)</li>
+                    </ul>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>ناحیه</th><th>نقش</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>ورمیس (Vermis)</strong></td><td>حرکات تنه و گردن</td></tr>
+                                <tr><td><strong>نیم‌کره‌ها (Hemispheres)</strong></td><td>حرکات اندام‌ها (دست و پا)</td></tr>
+                                <tr><td><strong>فلوکولوندولار (Flocculonodular)</strong></td><td><strong>تعادل</strong> (با دستگاه دهلیزی)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>اختلال: آتاکسی (Ataxia)</strong>
+                        <ul>
+                            <li>ناشی از <strong>آسیب مخچه</strong></li>
+                            <li>علائم: <strong>عدم هماهنگی</strong> حرکات، <strong>لرزش عمدی</strong> (Intention Tremor)، <strong>دیس‌متری</strong></li>
+                            <li>راه رفتن <strong>مست‌گونه</strong> (Gait Ataxia)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-microscope"></i> عقده‌های قاعده‌ای (Basal Ganglia)</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;">اجزاء</h3>
+                            <ul>
+                                <li><strong>پوتامن (Putamen)</strong></li>
+                                <li><strong>هسته دم‌دار (Caudate Nucleus)</strong></li>
+                                <li><strong>گلوبوس پالیدوس (Globus Pallidus)</strong></li>
+                                <li><strong>ناحیه ساب‌تالاموس (Subthalamus)</strong></li>
+                                <li><strong>ماده سیاه (Substantia Nigra)</strong> – pars compacta (دوپامین)</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;">نقش</h3>
+                            <ul>
+                                <li><strong>شروع</strong> حرکت</li>
+                                <li><strong>مهار</strong> حرکات ناخواسته</li>
+                                <li>تنظیم <strong>تونوس</strong> عضلانی</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="box-green">
+                            <h4 style="font-weight:700; color:#0a3147;">مسیر مستقیم (تشویقی)</h4>
+                            <p>گیرنده: <strong>D1</strong> (دوپامین) – تسریع حرکت</p>
+                        </div>
+                        <div class="box-red">
+                            <h4 style="font-weight:700; color:#0a3147;">مسیر غیرمستقیم (مهاری)</h4>
+                            <p>گیرنده: <strong>D2</strong> (دوپامین) – مهار حرکت</p>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="box-red">
+                            <h4 style="font-weight:700; color:#0a3147;">پارکینسون (Parkinson's Disease)</h4>
+                            <ul>
+                                <li><strong>تخریب</strong> ماده سیاه ← <strong>↓ دوپامین</strong></li>
+                                <li>علائم: <strong>لرزش در حال استراحت</strong>، <strong>سفتی</strong>، <strong>کندی حرکت</strong></li>
+                                <li>درمان: <strong>لوودوپا (L-DOPA)</strong></li>
+                            </ul>
+                        </div>
+                        <div class="box-red">
+                            <h4 style="font-weight:700; color:#0a3147;">هانتینگتون (Huntington's Disease)</h4>
+                            <ul>
+                                <li><strong>ژنتیکی</strong> (اتوزوم غالب)</li>
+                                <li>علائم: <strong>حرکات غیرارادی</strong> (کُرِه – Chorea)، <strong>زوال عقل</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> پارکینسون = <strong>↓ دوپامین</strong> ← <strong>کندی حرکت</strong>. هانتینگتون = <strong>↑ دوپامین نسبی</strong> ← <strong>حرکات غیرارادی</strong>.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-heart"></i> سیستم لیمبیک</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">هیپوکامپ (Hippocampus)</h4><p><strong>حافظه</strong> (به خصوص حافظه فضایی و تبدیل حافظه کوتاه‌مدت به بلندمدت)</p><p>آسیب ← <strong>فراموشی قدامی</strong></p></div>
+                        <div class="box-blue"><h4 style="font-weight:700; color:#0a3147;">آمیگدال (Amygdala)</h4><p><strong>هیجانات</strong> (به خصوص <strong>ترس</strong>)</p></div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> هیپوکامپ برای <strong>حافظه</strong> و آمیگدال برای <strong>ترس</strong> حیاتی هستند.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-network-wired"></i> تشکیل شبکه‌ای (Reticular Formation)</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-list"></i> نقش‌ها</h3>
+                            <ul>
+                                <li><strong>بیداری (Arousal)</strong> و <strong>توجه</strong></li>
+                                <li><strong>خواب</strong> (به ویژه خواب REM)</li>
+                                <li>تنظیم <strong>تونوس عضلانی</strong></li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> ARAS</h3>
+                            <ul>
+                                <li><strong>سیستم فعال‌کننده شبکه‌ای صعودی</strong></li>
+                                <li>مسیر: ساقه مغز ← تالاموس ← قشر</li>
+                                <li>آسیب ← <strong>کما</strong></li>
+                                <li>نوروترانسمیترها: <strong>استیل‌کولین</strong>، <strong>نوراپی‌نفرین</strong>، <strong>سروتونین</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> <strong>ARAS</strong> مسئول <strong>بیداری و هوشیاری</strong> است. آسیب به آن می‌تواند باعث <strong>کما</strong> شود.
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>راه هرمی:</strong> حرکات ارادی دقیق</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>مخچه:</strong> هماهنگی، تعادل</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>آتاکسی:</strong> اختلال هماهنگی (آسیب مخچه)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پارکینسون:</strong> ↓ دوپامین ← L-DOPA</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>هانتینگتون:</strong> حرکات غیرارادی (ژنتیکی)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>هیپوکامپ:</strong> حافظه</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>آمیگدال:</strong> ترس</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ARAS:</strong> بیداری ← آسیب ← کما</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل قشر حرکتی، راه‌های هرمی و خارج‌هرمی، مخچه (آتاکسی)، عقده‌های قاعده‌ای (پارکینسون، هانتینگتون)، سیستم لیمبیک (هیپوکامپ، آمیگدال) و تشکیل شبکه‌ای (ARAS) می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۱۲ =====
+        {
+            id: 12,
+            title: 'فیزیولوژی دستگاه گوارش',
+            icon: 'fa-solid fa-stomach',
+            color: '#b1653b',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-stomach"></i> کلیات دستگاه گوارش</h2>
+                    <ul>
+                        <li><strong>حرکت (Motility):</strong> جویدن، بلع، پریستالسیس</li>
+                        <li><strong>ترشح (Secretion):</strong> بزاق، شیره معده، صفرا، آنزیم‌ها</li>
+                        <li><strong>هضم (Digestion):</strong> تجزیه مکانیکی و شیمیایی غذا</li>
+                        <li><strong>جذب (Absorption):</strong> عبور مواد از دیواره روده به خون</li>
+                    </ul>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>شبکه می‌انتریک (Auerbach's):</strong> بین لایه‌های عضلانی ← کنترل <strong>حرکت</strong><br>
+                        <strong>شبکه زیرمخاطی (Meissner's):</strong> در زیرمخاط ← کنترل <strong>ترشح</strong>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-vial"></i> ترشحات گوارشی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-droplet"></i> بزاق</h3>
+                            <ul>
+                                <li>غدد: پاروتید، زیرفکی، زیرزبانی</li>
+                                <li>مواد: آمیلاز، لیزوزیم، موسین</li>
+                                <li>pH ~۷ (خنثی)</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-flask"></i> شیره معده</h3>
+                            <ul>
+                                <li><strong>سلول‌های پاریتال:</strong> <strong>HCl</strong> و <strong>فاکتور داخلی</strong></li>
+                                <li><strong>سلول‌های اصلی:</strong> <strong>پپسینوژن</strong> ← پپسین</li>
+                                <li><strong>فاکتور داخلی:</strong> جذب <strong>ویتامین B₁₂</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>کمبود فاکتور داخلی ← کم‌خونی پرنیشیوز</strong>
+                    </div>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-flask"></i> لوزالمعده</h3>
+                            <ul>
+                                <li>بی‌کربنات (خنثی‌سازی اسید)</li>
+                                <li>آمیلاز، لیپاز، تریپسینوژن</li>
+                            </ul>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-flask"></i> کبد و صفرا</h3>
+                            <ul>
+                                <li>صفرا: <strong>نمک‌های صفراوی</strong> ← امولسیون چربی</li>
+                                <li>کیسه صفرا: ذخیره و تغلیظ صفرا</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-dna"></i> هضم و جذب</h2>
+                    <div class="grid-2">
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-bread"></i> کربوهیدرات‌ها</h3>
+                            <p>نشاسته ← آمیلاز ← مالتوز ← مالتاز ← <strong>گلوکز</strong></p>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-drumstick-bite"></i> پروتئین‌ها</h3>
+                            <p>پپسین (معده) ← تریپسین/کیموتریپسین ← پپتیدازها ← <strong>اسیدهای آمینه</strong></p>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-burger"></i> چربی‌ها</h3>
+                            <p>امولسیون (نمک‌های صفراوی) ← لیپاز ← <strong>مونوگلیسرید + اسیدهای چرب</strong></p>
+                        </div>
+                        <div class="box-blue">
+                            <h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-right"></i> جذب</h3>
+                            <ul>
+                                <li><strong>روده کوچک:</strong> محل اصلی جذب</li>
+                                <li><strong>ویتامین B₁₂:</strong> جذب در <strong>ایلئوم</strong> با فاکتور داخلی</li>
+                                <li><strong>آهن:</strong> جذب در <strong>دوازدهه</strong> و <strong>ژژنوم</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> روده کوچک محل اصلی جذب مواد مغذی است. <strong>پرزها</strong> و <strong>میکروویلی</strong> سطح جذب را ~۲۰۰ برابر افزایش می‌دهند.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-table"></i> هورمون‌های گوارشی</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>هورمون</th><th>منشأ</th><th>عمل</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>گاسترین</strong></td><td>سلول‌های G (معده)</td><td>↑ ترشح <strong>HCl</strong></td></tr>
+                                <tr><td><strong>سکرتین</strong></td><td>سلول‌های S (دوازدهه)</td><td>↑ ترشح <strong>بی‌کربنات</strong> پانکراس</td></tr>
+                                <tr><td><strong>CCK</strong></td><td>سلول‌های I (دوازدهه)</td><td>↑ انقباض <strong>کیسه صفرا</strong>، ↑ آنزیم‌های پانکراس</td></tr>
+                                <tr><td><strong>GIP</strong></td><td>سلول‌های K (دوازدهه)</td><td>↓ HCl، ↑ انسولین</td></tr>
+                                <tr><td><strong>موتیلین</strong></td><td>سلول‌های Mo (روده)</td><td>↑ حرکت روده</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>گاسترین:</strong> <span style="color:#c44545;">↑</span> اسید معده &nbsp;|&nbsp; <strong>سکرتین:</strong> <span style="color:#2a7a3a;">↑</span> بی‌کربنات &nbsp;|&nbsp; <strong>CCK:</strong> <span style="color:#b1653b;">↑</span> کیسه صفرا
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی مفاهیم کلیدی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>بزاق:</strong> آمیلاز، لیزوزیم، موسین – pH ~۷</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>شیره معده:</strong> HCl (پاریتال)، پپسینوژن (سلول‌های اصلی)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>فاکتور داخلی:</strong> جذب B₁₂</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>لوزالمعده:</strong> بی‌کربنات، آمیلاز، لیپاز، تریپسینوژن</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>صفرا:</strong> نمک‌های صفراوی ← امولسیون چربی</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>جذب:</strong> روده کوچک (پرزها + میکروویلی)</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>گاسترین:</strong> ↑ HCl</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>سکرتین:</strong> ↑ بی‌کربنات</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>CCK:</strong> ↑ کیسه صفرا</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل کلیات گوارش، ترشحات (بزاق، معده، پانکراس، کبد)، هضم و جذب (کربوهیدرات، پروتئین، چربی)، حرکت (پریستالسیس) و هورمون‌های گوارشی (گاسترین، سکرتین، CCK) می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۱۳ =====
+        {
+            id: 13,
+            title: 'متابولیسم مواد و تنظیم دما',
+            icon: 'fa-solid fa-fire',
+            color: '#c44545',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-bread"></i> متابولیسم کربوهیدرات‌ها</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-right"></i> گلیکولیز</h3><ul><li>گلوکز ← <strong>۲ پیروات</strong> + ۲ ATP</li><li><strong>بی‌هوازی</strong> (بدون O₂)</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-sync"></i> چرخه کربس (TCA)</h3><ul><li>استیل-CoA ← CO₂ + <strong>NADH</strong> + <strong>FADH₂</strong></li><li>هر چرخه: ۳ NADH، ۱ FADH₂، ۱ GTP</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-bolt"></i> زنجیره انتقال الکترون</h3><ul><li>NADH + FADH₂ ← <strong>ATP</strong> (فسفریلاسیون اکسیداتیو)</li><li>هر NADH ≈ ۲/۵ ATP، هر FADH₂ ≈ ۱/۵ ATP</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-right"></i> گلیکونئوژنز</h3><ul><li>ساخت گلوکز از <strong>غیرکربوهیدرات‌ها</strong> (کبد)</li></ul></div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>انسولین:</strong> ↓ قند خون &nbsp;|&nbsp; <strong>گلوکاگون:</strong> ↑ قند خون
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-drumstick-bite"></i> متابولیسم پروتئین‌ها</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-list"></i> اسیدهای آمینه</h3><ul><li><strong>ضروری:</strong> ۹ نوع (غذا)</li><li><strong>غیرضروری:</strong> ۱۱ نوع (بدن می‌سازد)</li></ul></div>
+                        <div class="box-red"><h3 style="margin-top:0;"><i class="fas fa-solid fa-triangle-exclamation"></i> چرخه اوره</h3><ul><li>NH₃ (سمی) ← <strong>اوره</strong> (دفع از کلیه)</li><li>محل: <strong>کبد</strong></li></ul></div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>کبد:</strong> سنتز <strong>آلبومین</strong> و <strong>فیبرینوژن</strong>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-burger"></i> متابولیسم چربی‌ها</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-right"></i> لیپولیز</h3><ul><li>تری‌گلیسرید ← <strong>گلیسرول</strong> + <strong>اسیدهای چرب</strong></li><li>تحریک: <strong>گلوکاگون</strong>، <strong>اپی‌نفرین</strong></li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-bolt"></i> بتا-اکسیداسیون</h3><ul><li>اسیدهای چرب ← <strong>استیل-CoA</strong> (میتوکندری)</li></ul></div>
+                        <div class="box-red"><h3 style="margin-top:0;"><i class="fas fa-solid fa-flask"></i> کتوژنز</h3><ul><li>اجسام کتونی: <strong>استواستات، بتا-هیدروکسی‌بوتیرات، استون</strong></li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-table"></i> لیپوپروتئین‌ها</h3><ul><li><strong>LDL:</strong> کلسترول بد</li><li><strong>HDL:</strong> کلسترول خوب</li></ul></div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-temperature-high"></i> تنظیم دما</h2>
+                    <ul>
+                        <li>دمای طبیعی: <strong>~۳۷°C</strong></li>
+                        <li><strong>تولید گرما:</strong> BMR، لرز، SDA، هورمون تیروئید</li>
+                        <li><strong>دفع گرما:</strong> تشعشع، هدایت، همرفت، تعریق</li>
+                    </ul>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>هیپوتالاموس قدامی:</strong> مرکز سرمایشی<br>
+                        <strong>هیپوتالاموس خلفی:</strong> مرکز گرمایشی
+                    </div>
+                    <div class="box-red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>تب (Fever):</strong> افزایش نقطه تنظیم هیپوتالاموس توسط <strong>پیروژن‌ها</strong>
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>گلیکولیز:</strong> ۲ ATP</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>TCA:</strong> ۳ NADH، ۱ FADH₂</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>انسولین:</strong> ↓ قند خون</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>گلوکاگون:</strong> ↑ قند خون</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>چرخه اوره:</strong> کبد</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>LDL:</strong> کلسترول بد</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>HDL:</strong> کلسترول خوب</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>تب:</strong> ↑ نقطه تنظیم (پیروژن)</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل متابولیسم کربوهیدرات (گلیکولیز، TCA، ETC، گلیکونئوژنز)، پروتئین (چرخه اوره) و چربی (لیپولیز، بتا-اکسیداسیون، کتوژنز، LDL/HDL) و تنظیم دما می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۱۴ =====
+        {
+            id: 14,
+            title: 'غدد درون‌ریز و تولید مثل',
+            icon: 'fa-solid fa-vial',
+            color: '#2a7a3a',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-vial"></i> کلیات هورمون‌ها</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-list"></i> انواع</h3><ul><li><strong>پپتیدی:</strong> گیرنده سطح سلول (انسولین)</li><li><strong>استروئیدی:</strong> گیرنده داخل سلولی (کورتیزول)</li><li><strong>آمینی:</strong> مشتق از تیروزین (T3/T4، اپی‌نفرین)</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-right"></i> مکانیسم</h3><ul><li>پیام‌رسان‌های ثانویه (cAMP، IP3، DAG)</li><li>تنظیم بیان ژن (هورمون‌های استروئیدی)</li></ul></div>
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-brain"></i> هیپوتالاموس و هیپوفیز</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>هورمون هیپوفیز قدامی</th><th>عمل</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>GH</strong></td><td>↑ رشد و متابولیسم</td></tr>
+                                <tr><td><strong>TSH</strong></td><td>↑ T3/T4</td></tr>
+                                <tr><td><strong>ACTH</strong></td><td>↑ کورتیزول</td></tr>
+                                <tr><td><strong>FSH</strong></td><td>↑ فولیکول (زن)، ↑ اسپرماتوژنز (مرد)</td></tr>
+                                <tr><td><strong>LH</strong></td><td>↑ تخمک‌گذاری (زن)، ↑ تستوسترون (مرد)</td></tr>
+                                <tr><td><strong>پرولاکتین</strong></td><td>↑ تولید شیر</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>ADH و اکسی‌توسین:</strong> در <strong>هیپوتالاموس</strong> ساخته شده و در <strong>هیپوفیز خلفی</strong> ذخیره و ترشح می‌شوند.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-bolt"></i> تیروئید</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;">هورمون‌ها</h3><ul><li><strong>T3:</strong> فعال‌تر</li><li><strong>T4:</strong> فراوان‌تر</li><li><strong>ید:</strong> ضروری برای ساخت T3/T4</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;">نقش‌ها</h3><ul><li>↑ BMR</li><li>↑ رشد و تکامل</li></ul></div>
+                    </div>
+                    <div class="box-red">
+                        <strong>کم‌کاری تیروئید:</strong> میکسدم (بالغین)، کرتینیسم (نوزادان)<br>
+                        <strong>پرکاری تیروئید (گریوز):</strong> بیماری خودایمنی، اگزوفتالمی
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-kidney"></i> فوق‌کلیه</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;">قشر</h3><ul><li><strong>آلدوسترون:</strong> ↑ Na⁺، ↓ K⁺</li><li><strong>کورتیزول:</strong> ↑ قند خون، ضدالتهاب</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;">مدولا</h3><ul><li><strong>اپی‌نفرین</strong>، <strong>نوراپی‌نفرین</strong></li><li>پاسخ <strong>جنگ و گریز</strong></li></ul></div>
+                    </div>
+                    <div class="box-red">
+                        <strong>سندرم کوشینگ:</strong> ↑ کورتیزول<br>
+                        <strong>بیماری آدیسون:</strong> ↓ کورتیزول
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-pancreas"></i> پانکراس</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>سلول</th><th>هورمون</th><th>عمل</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>بتا (β)</strong></td><td>انسولین</td><td>↓ قند خون</td></tr>
+                                <tr><td><strong>آلفا (α)</strong></td><td>گلوکاگون</td><td>↑ قند خون</td></tr>
+                                <tr><td><strong>دلتا (δ)</strong></td><td>سوماتواستاتین</td><td>مهار انسولین و گلوکاگون</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-red">
+                        <strong>دیابت نوع ۱:</strong> کمبود انسولین<br>
+                        <strong>دیابت نوع ۲:</strong> مقاومت به انسولین
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-baby"></i> تولید مثل</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;">مرد</h3><ul><li><strong>تستوسترون:</strong> سلول‌های لیدیگ</li><li>FSH ← ↑ اسپرماتوژنز</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;">زن</h3><ul><li><strong>استروژن:</strong> صفات ثانویه زنانه</li><li><strong>پروژسترون:</strong> حفظ بارداری</li><li>چرخه قاعدگی: فولیکولی ← تخمک‌گذاری ← لوتئال</li></ul></div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>هورمون‌های جفت:</strong> hCG (تشخیص بارداری)، استروژن، پروژسترون، HPL
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>GH:</strong> رشد</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ADH:</strong> بازجذب آب</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>T3/T4:</strong> ↑ BMR</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>کرتینیسم:</strong> کم‌کاری تیروئید نوزادان</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>کورتیزول:</strong> ↑ قند خون</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>کوشینگ:</strong> ↑ کورتیزول</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>آدیسون:</strong> ↓ کورتیزول</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>انسولین:</strong> ↓ قند خون</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>گلوکاگون:</strong> ↑ قند خون</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>تستوسترون:</strong> صفات ثانویه مردانه</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>استروژن:</strong> صفات ثانویه زنانه</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>پروژسترون:</strong> حفظ بارداری</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل کلیات هورمون‌ها، هیپوتالاموس و هیپوفیز، تیروئید، فوق‌کلیه، پانکراس و تولید مثل (نر و ماده) می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        },
+        // ===== فصل ۱۵ =====
+        {
+            id: 15,
+            title: 'فیزیولوژی ورزش',
+            icon: 'fa-solid fa-person-running',
+            color: '#1a5e7a',
+            content: `
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-heart"></i> پاسخ قلبی-عروقی به ورزش</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> برون‌ده قلبی</h3><ul><li>استراحت: ~۵ L/min</li><li>ورزش شدید: تا <strong>۲۰-۲۵ L/min</strong></li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> جریان خون عضلات</h3><ul><li>تا <strong>۱۵-۲۵ برابر</strong> افزایش</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrow-up"></i> فشار خون</h3><ul><li>سیستولی: ↑ تا <strong>۲۰۰ mmHg</strong></li><li>دیاستولی: تقریباً ثابت</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;"><i class="fas fa-solid fa-arrows-split-up-and-left"></i> بازتوزیع جریان خون</h3><ul><li>↓ کلیه، پوست، گوارش</li><li>↑ عضلات اسکلتی، قلب</li></ul></div>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>نکته کلیدی:</strong> افزایش برون‌ده قلبی در ورزش ناشی از <strong>↑ ضربان قلب</strong> (سمپاتیک) و <strong>↑ حجم ضربه‌ای</strong> (فرانک-استارلینگ) است.
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-lungs"></i> پاسخ تنفسی</h2>
+                    <ul>
+                        <li><strong>تهویه ریوی:</strong> ۶ → <strong>۱۰۰-۱۵۰ L/min</strong></li>
+                        <li><strong>VO₂max:</strong> شاخص آمادگی جسمانی</li>
+                    </ul>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-bolt"></i> متابولیسم انرژی</h2>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>سیستم</th><th>مدت</th><th>شدت</th><th>محصول</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>فسفاژن (ATP-PCr)</strong></td><td>۰-۱۰ ثانیه</td><td>بسیار شدید</td><td>ATP (بدون O₂)</td></tr>
+                                <tr><td><strong>گلیکولیتیک بی‌هوازی</strong></td><td>۳۰-۶۰ ثانیه</td><td>شدید</td><td>ATP + <strong>لاکتات</strong></td></tr>
+                                <tr><td><strong>اکسیداتیو (هوازی)</strong></td><td>دقایق تا ساعت‌ها</td><td>متوسط تا کم</td><td>ATP + CO₂ + H₂O</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-gold">
+                        <i class="fas fa-gem"></i>
+                        <strong>ورزش شدید کوتاه‌مدت:</strong> ATP-PCr (۱۰ ثانیه) و گلیکولیتیک (تا ۶۰ ثانیه)<br>
+                        <strong>ورزش طولانی‌مدت:</strong> اکسیداتیو (هوازی)
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-temperature-high"></i> تنظیم دما</h2>
+                    <ul>
+                        <li>تولید گرما: تا <strong>۲۰ برابر</strong> افزایش</li>
+                        <li>تعریق: مکانیسم اصلی دفع گرما</li>
+                    </ul>
+                    <div class="box-red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <strong>عوارض کم‌آبی:</strong> گرمازدگی، گرفتگی عضلات، کلافگی گرمایی
+                    </div>
+                </div>
+                <div class="section">
+                    <h2><i class="fas fa-solid fa-dumbbell"></i> سازگاری‌های ورزشی</h2>
+                    <div class="grid-2">
+                        <div class="box-blue"><h3 style="margin-top:0;">قلبی-عروقی</h3><ul><li>↑ حجم ضربه‌ای</li><li>↓ ضربان قلب استراحت</li><li>↑ مویرگ‌ها</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;">متابولیک</h3><ul><li>↑ میتوکندری</li><li>↑ گلیکوژن</li><li>↑ استفاده از چربی</li></ul></div>
+                        <div class="box-blue"><h3 style="margin-top:0;">عضلانی</h3><ul><li>استقامتی: ↑ نوع I</li><li>مقاومتی: ↑ هیپرتروفی نوع II</li></ul></div>
+                    </div>
+                </div>
+                <div class="section" style="background: linear-gradient(135deg, #dce8f0, #ffffff);">
+                    <h2><i class="fas fa-bolt"></i> جمع‌بندی</h2>
+                    <div class="two-col-list">
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>برون‌ده قلبی:</strong> ۵ → ۲۰-۲۵ L/min</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>تهویه:</strong> ۶ → ۱۰۰-۱۵۰ L/min</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>ATP-PCr:</strong> ۰-۱۰ ثانیه</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>گلیکولیتیک:</strong> ۳۰-۶۰ ثانیه ← لاکتات</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>اکسیداتیو:</strong> طولانی‌مدت</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>تعریق:</strong> مکانیسم اصلی دفع گرما</div>
+                        <div><i class="fas fa-check-circle" style="color:#1a7a3a;"></i> <strong>سازگاری:</strong> ↑ SV، ↑ میتوکندری</div>
+                    </div>
+                    <div style="background:#0a3147; color:white; border-radius:30px; padding:12px 20px; margin-top:12px; text-align:center;">
+                        <i class="fas fa-check-double"></i> <strong>پیشنهاد:</strong> این خلاصه را همراه با مطالعه کتاب اصلی مرور کنید.
+                        <span style="display:block; font-size:0.85rem; opacity:0.8;">مرور این مطالب به درک بهتر مفاهیم کمک می‌کند</span>
+                    </div>
+                </div>
+                <div class="footnote-chapter">
+                    <i class="fas fa-solid fa-check-circle" style="color:#1a7a3a;"></i>
+                    <div>
+                        <strong>یادآوری:</strong> مفاهیم این خلاصه شامل پاسخ قلبی-عروقی، تنفسی، متابولیسم انرژی (سیستم‌های ATP-PCr، گلیکولیتیک، اکسیداتیو)، تنظیم دما و سازگاری‌های ورزشی می‌باشد.
+                        <span style="display:block; margin-top:4px;">مطالعه این خلاصه به عنوان مکمل کتاب اصلی توصیه می‌شود.</span>
+                    </div>
+                </div>
+            `
+        }
+    ];
+
+    // ============================================================
+    //  ۳. توابع ناوبری، جستجو، دارک مود
+    // ============================================================
+    function renderHome(filter) {
+        filter = filter || '';
+        const grid = document.getElementById('chapterGrid');
+        const q = filter.trim().toLowerCase();
+        let html = '', found = 0;
+        chapters.forEach(ch => {
+            if (ch.title.includes(q) || ch.id.toString().includes(q)) {
+                found++;
+                html += `<div class="chapter-card" onclick="openChapter(${ch.id})">
+                    <div class="num">${ch.id} <i class="${ch.icon}"></i></div>
+                    <div class="title">${ch.title}</div>
+                    <div class="badge-sm">فصل ${ch.id}</div>
+                </div>`;
+            }
+        });
+        if (!found) html = '<div class="no-result"><i class="fas fa-search" style="margin-left:10px;"></i> فصلی با این نام یافت نشد.</div>';
+        grid.innerHTML = html;
+    }
+
+    function filterChapters() {
+        const input = document.getElementById('searchInput');
+        renderHome(input.value);
+    }
+
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function goHome() {
+        showPage('page-home');
+        document.getElementById('searchInput').value = '';
+        renderHome('');
+    }
+
+    function openChapter(id) {
+        const ch = chapters.find(c => c.id === id);
+        if (!ch) return;
+        document.getElementById('chapterTitle').innerHTML = `<i class="${ch.icon}" style="color:${ch.color};"></i> فصل ${ch.id} · ${ch.title}`;
+        document.getElementById('chapterContent').innerHTML = ch.content;
+        showPage('page-chapter');
+    }
+
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark');
+        document.querySelectorAll('.toolbar button i.fa-moon, .chapter-nav button i.fa-moon').forEach(el => {
+            el.className = document.body.classList.contains('dark') ? 'fas fa-sun' : 'fas fa-moon';
+        });
+    }
+
+    // ============================================================
+    //  ۴. مقداردهی اولیه
+    // ============================================================
+    renderHome('');
+</script>
+</body>
+</html>
